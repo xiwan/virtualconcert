@@ -343,6 +343,8 @@ namespace PolyPerfect
 
         private void DecideNextState(bool wasIdle, bool firstState = false)
         {
+            if (!this.enabled) return;
+
             attacking = false;
 
             // Look for a predator.

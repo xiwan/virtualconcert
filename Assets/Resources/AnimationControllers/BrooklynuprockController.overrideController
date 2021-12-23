@@ -9,5 +9,5 @@ AnimatorOverrideController:
   m_Name: BrooklynuprockController
   m_Controller: {fileID: 9100000, guid: 229b1a8a03e4f4c18859806dc385eb39, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 4d10202860dceb04983fc2b2f7484e3b, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 9e6f2a6ec6dfb9743b48c89303657e9e, type: 3}
     m_OverrideClip: {fileID: -203655887218126122, guid: 9cdb70bd3e10f4714a2ed27511099f4a, type: 3}

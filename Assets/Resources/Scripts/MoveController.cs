@@ -16,7 +16,11 @@ namespace PolyPerfect
 
         private AnimatorOverrideController _overrideController;
         private AnimatorOverrideController _currentController;
-        private string _swapAnimatorPath = "AnimationControllers/BrooklynuprockController";
+        private string _swapAnimatorPath = "AnimationControllers/UserController";
+        private bool _isJumping = false;
+        private bool _isWalking = false;
+        private bool _isRunning = false;
+        private bool _isDancing = false;
 
         public float speed = 5f;
         public float rotateSpeed = 1f;
@@ -59,11 +63,12 @@ namespace PolyPerfect
                     {
                         Debug.Log(_overrideController);
                         _animator.runtimeAnimatorController = _overrideController;
-                        _animator.SetBool("isDancing", true);
+                        _animator.SetBool("isIdling", true);
                     }   
                 }
-                
+            
                 MoveLikeWoW();
+                MoveCustom();
             }
             else
             {
@@ -77,7 +82,7 @@ namespace PolyPerfect
                     {
                         Debug.Log(_currentController);
                         _animator.runtimeAnimatorController = _currentController;
-                        _animator.SetBool("isDancing", true);
+                        _animator.SetBool("isIdling", true);
                     }
                 }
             }
@@ -90,25 +95,32 @@ namespace PolyPerfect
             {
                 if (_follower != null)
                 {
-                    //_follower.transform.SetParent(this.transform);
-                    _follower.transform.position = Vector3.Lerp(_follower.transform.position, transform.position + new Vector3(0, 1.8f, 0), 0.1f);
-                    _follower.transform.LookAt(transform.forward, transform.up);
-                    //_follower.transform.Translate(transform.up * 1 * Time.deltaTime, Space.World);
+                    FollowObject(_follower.transform, transform, new Vector3(0, 1.8f, 0));
                 }
             }
             else
             {
                 if (_follower != null)
                 {
-                    //_follower.transform.position = Vector3.Lerp(_follower.transform.position, _mainCamera.transform.position, 0.1f);
-                    //_follower.transform.LookAt(_mainCamera.transform.forward, _mainCamera.transform.up);
+                     //FollowObject(_follower.transform, _mainCamera.transform);
                 }
             }
             
         }
 
+        private void FollowObject(Transform follower, Transform target, Vector3 offset)
+        {
+            float distance = Vector3.Distance(follower.position, target.position);
+            var direction = target.position - follower.position;
+            follower.position = Vector3.MoveTowards(follower.position, target.position + offset, Time.deltaTime * 10);
+            
+            var rotation = Quaternion.LookRotation(direction);
+            follower.rotation = Quaternion.LookRotation(target.forward);
+        }
+
         private void MoveLikeWoW()
         {
+            
             var _horizontal = Input.GetAxis("Horizontal");
             var _vertical = Input.GetAxis("Vertical");
 
@@ -117,6 +129,47 @@ namespace PolyPerfect
 
             transform.Rotate(Vector3.up, _horizontal * rotateSpeed);
 
+        }
+
+        private void MoveCustom()
+        {
+            // jump
+            if (Input.GetKey(KeyCode.Space))
+            {
+                if (isGround(transform) && !_isJumping)
+                {
+                    _isJumping = true; 
+                    _animator.SetBool("isJumping", true);
+                }
+                else
+                {
+                    _isJumping = false;
+                    _animator.SetBool("isJumping", false);
+                    _animator.SetBool("isDancing", false);  
+                }               
+            }
+            else if (Input.GetKey(KeyCode.E))
+            {
+                if (isGround(transform) && !_isDancing)
+                {
+                    _isDancing = true; 
+                    _animator.SetBool("isDancing", true);
+                }
+                else
+                {
+                    _isDancing = false;
+                    _animator.SetBool("isDancing", false);
+                    _animator.SetBool("isJumping", false);  
+                } 
+            }
+           
+        }
+
+        private bool isGround(Transform obj)
+        {
+            Vector3 fwd = transform.TransformDirection(-Vector3.up);
+            bool grounded =  Physics.Raycast(transform.position,fwd, 10 );
+            return grounded;
         }
     }
 
