@@ -129,6 +129,9 @@ namespace PolyPerfect
 
             transform.Rotate(Vector3.up, _horizontal * rotateSpeed);
 
+            _animator.SetBool("isBlending", true);
+            _animator.SetFloat("Speed", 0.9f);
+
         }
 
         private void MoveCustom()
