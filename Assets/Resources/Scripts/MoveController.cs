@@ -9,11 +9,9 @@ public class MoveController : MonoBehaviour
 {
     private CharacterController _characterController;
     private MonoBehaviour _wanderScript;
+    private MonoBehaviour _cameraChangeScript;
     private NavMeshAgent _navMeshAgent;
     private Animator _animator;
-    private Camera _mainCamera;
-    private CinemachineVirtualCamera _followCamera;
-    private CinemachineFreeLook _freeCamera;
     private GameObject _follower;
 
     private AnimatorOverrideController _overrideController;
@@ -39,30 +37,26 @@ public class MoveController : MonoBehaviour
 
     private void Awake()
     {
-        _animator = transform.GetComponent<Animator>();
-
-        _overrideController = Resources.Load<AnimatorOverrideController>(_swapAnimatorPath);
-        Debug.Log(_overrideController);
-
-        _currentController = new AnimatorOverrideController();
-        _currentController = (AnimatorOverrideController)_animator.runtimeAnimatorController;
-        Debug.Log(_currentController);
+   
 
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        _animator = transform.GetComponent<Animator>();
+
+        _overrideController = Resources.Load<AnimatorOverrideController>(_swapAnimatorPath);
+        _currentController = new AnimatorOverrideController();
+        _currentController = (AnimatorOverrideController)_animator.runtimeAnimatorController;
+
         _characterController = transform.GetComponent<CharacterController>();
         _wanderScript = transform.GetComponent<WanderScript>();
         _navMeshAgent = transform.GetComponent<NavMeshAgent>();
         _groundCheck = transform.Find("GroundCheck");
 
-        _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        _followCamera = GameObject.Find("CM vcam").GetComponent<CinemachineVirtualCamera>();
-        _freeCamera = GameObject.Find("CM FreeLook").GetComponent<CinemachineFreeLook>();
-        _follower = GameObject.Find("Follower");
-        
+        _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
+        _follower = GameObject.Find("Follower");   
     }
 
     // Update is called once per frame
@@ -73,6 +67,7 @@ public class MoveController : MonoBehaviour
             if (_wanderScript != null && _wanderScript.isActiveAndEnabled)
             {
                 _wanderScript.enabled = false;
+                //_wanderScript.StopAllCoroutines();
             }
             if (_navMeshAgent != null && _navMeshAgent.isActiveAndEnabled)
             {
@@ -116,22 +111,16 @@ public class MoveController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-        if (takeOver)
+        _cameraChangeScript.SendMessage("CameraSwitch", takeOver);
+        if (takeOver && _follower != null)
         {
-            if (_follower != null)
-            {
-                FollowObject(_follower.transform, transform, new Vector3(0, 1.8f, 0));
-            }
-        }
-        else
-        {
-            if (_follower != null)
-            {
-                //FollowObject(_follower.transform, _freeCamera.transform, Vector3.zero);
-            }
-        }
-        
+            // object[] messages = new object[2];
+            // messages[0] = transform;
+            // messages[1] = new Vector3(0, 1.8f, 0);
+            // _cameraChangeScript.SendMessage("CameraFollow", messages);
+            
+            FollowObject(_follower.transform, transform, new Vector3(0, 1.8f, 0));
+        }    
     }
 
     private void FollowObject(Transform follower, Transform target, Vector3 offset)
@@ -146,10 +135,6 @@ public class MoveController : MonoBehaviour
 
     private void MoveLikeWoW()
     {
-        // if (isGround(_groundCheck) && _velocity.y < 0)
-        // {
-        //     _velocity.y = 0;
-        // }
 
         var _horizontal = Input.GetAxis("Horizontal");
         var _vertical = Input.GetAxis("Vertical");
@@ -162,16 +147,21 @@ public class MoveController : MonoBehaviour
 
         transform.Rotate(Vector3.up, _horizontal * rotateSpeed);
 
+        var _speed = 0f;
         if (_horizontal != 0 || _vertical != 0)
         {
             _animator.SetBool("isBlending", true);
-            _animator.SetFloat("Speed", 0.9f);
+            _speed = 0.5f;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                _speed = 0.9f; 
+            }
         }
         else
         {
             _animator.SetBool("isBlending", false);
-            _animator.SetFloat("Speed", 0f);
         }
+        _animator.SetFloat("Speed", _speed);
 
     }
 
@@ -184,14 +174,10 @@ public class MoveController : MonoBehaviour
             {
                 _velocity.y += Mathf.Sqrt(jumpHeight * -2 * gravity);
                 _isJumping = true; 
-                //_animator.SetBool("isJumping", true);
             }
             else
             {
-                _isJumping = false;
-                //_animator.SetBool("isJumping", false);
-                //_animator.SetBool("isDancing", false); 
-                //_animator.SetBool("isBlending", false); 
+                _isJumping = false; 
             }  
             _animator.SetBool("isJumping", _isJumping);             
         }
@@ -203,21 +189,14 @@ public class MoveController : MonoBehaviour
             }
             else
             {
-                _isDancing = false;
-                //_animator.SetBool("isDancing", false);
-                //_animator.SetBool("isJumping", false);
-                //_animator.SetBool("isBlending", false);   
+                _isDancing = false; 
             }
             _animator.SetBool("isDancing", _isDancing);
-        }
-        
+        }    
     }
 
     private bool isGround(Transform obj)
     {
-        // Vector3 fwd = transform.TransformDirection(-Vector3.up);
-        // bool grounded =  Physics.Raycast(transform.position,fwd, 10 );
-        // return grounded;
         _isGrounded = Physics.CheckSphere(obj.position, groundCheckRadius, layerMask);
         return _isGrounded;
     }

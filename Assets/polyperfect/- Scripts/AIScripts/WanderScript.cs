@@ -348,7 +348,7 @@ namespace PolyPerfect
 
         private void DecideNextState(bool wasIdle, bool firstState = false)
         {
-            Debug.Log(this.enabled);
+            //Debug.Log(this.enabled);
             if (!this.enabled) return;
 
             attacking = false;

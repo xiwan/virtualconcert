@@ -56,6 +56,7 @@
      <Compile Include="Assets\polyperfect\- Scripts\RandomInt.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\IK\PolyIk.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\AIScripts\WanderManager.cs" />
+     <Compile Include="Assets\Resources\Scripts\CameraChange.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.25f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
