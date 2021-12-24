@@ -187,6 +187,16 @@ namespace PolyPerfect
             }
         }
 
+        public void StartWander()
+        {
+            if (WanderManager.Instance != null && WanderManager.Instance.PeaceTime)
+            {
+                SetPeaceTime(true);
+            }
+
+            StartCoroutine(InitYield());
+        }
+
         private void Awake()
         {
             animator = GetComponent<Animator>();
@@ -322,12 +332,7 @@ namespace PolyPerfect
 
         private void Start()
         {
-            if (WanderManager.Instance != null && WanderManager.Instance.PeaceTime)
-            {
-                SetPeaceTime(true);
-            }
-
-            StartCoroutine(InitYield());
+            StartWander();
         }
 
         private void OnDestroy()
@@ -343,6 +348,7 @@ namespace PolyPerfect
 
         private void DecideNextState(bool wasIdle, bool firstState = false)
         {
+            Debug.Log(this.enabled);
             if (!this.enabled) return;
 
             attacking = false;
