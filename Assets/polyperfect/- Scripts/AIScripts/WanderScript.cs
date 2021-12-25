@@ -332,6 +332,8 @@ namespace PolyPerfect
 
         private void Start()
         {
+
+
             StartWander();
         }
 

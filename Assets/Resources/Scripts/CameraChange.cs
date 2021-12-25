@@ -24,9 +24,11 @@ public class CameraChange : MonoBehaviour
         }
     }
 
-    public void CameraFollow(Transform target, Vector3 offset)
+    public void CameraFollow(Transform follower, Transform target, Vector3 offset)
     {
-        var follower = followCamera.transform;
+        if (follower == null)
+            follower = followCamera.transform;
+        //var follower = followCamera.transform;
         float distance = Vector3.Distance(follower.position, target.position);
         follower.position = Vector3.MoveTowards(follower.position, target.position + offset, Time.deltaTime * 100);
         

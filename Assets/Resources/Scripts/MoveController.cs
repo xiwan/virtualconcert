@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,10 +10,10 @@ public class MoveController : MonoBehaviour
 {
     private CharacterController _characterController;
     private MonoBehaviour _wanderScript;
-    private MonoBehaviour _cameraChangeScript;
+    private MonoBehaviour _gm;
     private NavMeshAgent _navMeshAgent;
     private Animator _animator;
-    private GameObject _follower;
+    //private GameObject _follower;
 
     private AnimatorOverrideController _overrideController;
     private AnimatorOverrideController _currentController;
@@ -26,6 +27,8 @@ public class MoveController : MonoBehaviour
     private bool _isDancing = false;
     private Vector3 _velocity = Vector3.zero;
 
+    private Player _player;
+
     public float groundCheckRadius = 0.2f;
     public float gravity = -9.8f;
     public float speed = 5f;
@@ -33,12 +36,89 @@ public class MoveController : MonoBehaviour
     public float jumpHeight = 3f;
     public bool takeOver = false;
     public LayerMask layerMask;
+    private EventManager _eventManager;
     
+    // Take Over Authority On Event
+    public void TakeOverEventOn()
+    {
+        if (_wanderScript != null && _wanderScript.isActiveAndEnabled)
+        {
+            _wanderScript.enabled = false;
+            _wanderScript.StopAllCoroutines();
+        }
+        if (_navMeshAgent != null && _navMeshAgent.isActiveAndEnabled)
+        {
+            _navMeshAgent.enabled = false;
+        }
+
+        if (_animator != null )
+        {
+            if (_overrideController != null && _overrideController != _animator.runtimeAnimatorController)
+            {
+                Debug.Log(_overrideController);
+                _animator.runtimeAnimatorController = _overrideController;
+            }   
+        }
+
+        ((GameManager)_gm).SelectPlayer(_player.InstanceId);
+
+    }
+
+    // Take Over Authority Off Event
+    public void TakeOverEventOff()
+    {
+        if (_wanderScript != null && !_wanderScript.isActiveAndEnabled)
+        {
+            _wanderScript.enabled = true; 
+            _wanderScript.Invoke("StartWander", (UnityEngine.Random.Range(0, 200) / 100));             
+        }
+        if (_navMeshAgent != null && !_navMeshAgent.isActiveAndEnabled)
+        {
+            _navMeshAgent.enabled = true;                    
+        }
+
+        if (_animator != null)
+        {
+            if (_currentController != null && _currentController != _animator.runtimeAnimatorController)
+            {
+                Debug.Log(_currentController);
+                _animator.runtimeAnimatorController = _currentController;
+            }
+        }
+        ((GameManager)_gm).DeselectPlayer(_player.InstanceId);
+    }
 
     private void Awake()
     {
-   
+         //_follower = GameObject.Find("Follower");
+         //_gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 
+        if(_player == null)
+        {
+            _player = new Player();
+            _player.InstanceId = GetInstanceID();
+            _player.MoveController = this;
+            _player.TakeOver = false;
+            _player.Follower = GameObject.Find("Follower");
+ 
+            // none of the players has been selected
+            //GameManager.getInstance().RegisterPlayer(_player); 
+            //((GameManager)_gm).RegisterPlayer(_player); 
+            PlayerPool.getInstance().upsertData(_player.InstanceId, _player);
+        }
+        if (_eventManager == null)
+        {
+            _eventManager = new EventManager();
+            // register event
+            _eventManager.AddHandler(EVENT.TakeOverEventOn, () =>{
+                TakeOverEventOn();
+                MoveLikeWoW();
+                MoveCustom();
+            });
+            _eventManager.AddHandler(EVENT.TakeOverEventOff, () => {
+                TakeOverEventOff();             
+            }); 
+        }
     }
 
     // Start is called before the first frame update
@@ -50,13 +130,15 @@ public class MoveController : MonoBehaviour
         _currentController = new AnimatorOverrideController();
         _currentController = (AnimatorOverrideController)_animator.runtimeAnimatorController;
 
+        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         _characterController = transform.GetComponent<CharacterController>();
         _wanderScript = transform.GetComponent<WanderScript>();
         _navMeshAgent = transform.GetComponent<NavMeshAgent>();
         _groundCheck = transform.Find("GroundCheck");
 
-        _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
-        _follower = GameObject.Find("Follower");   
+        //_cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
+
     }
 
     // Update is called once per frame
@@ -64,74 +146,28 @@ public class MoveController : MonoBehaviour
     {
         if (takeOver)
         {
-            if (_wanderScript != null && _wanderScript.isActiveAndEnabled)
-            {
-                _wanderScript.enabled = false;
-                //_wanderScript.StopAllCoroutines();
-            }
-            if (_navMeshAgent != null && _navMeshAgent.isActiveAndEnabled)
-            {
-                _navMeshAgent.enabled = false;
-            }
-                
-            if (_animator != null )
-            {
-
-                if (_overrideController != null && _overrideController != _animator.runtimeAnimatorController)
-                {
-                    Debug.Log(_overrideController);
-                    _animator.runtimeAnimatorController = _overrideController;
-                }   
-            }
-            MoveLikeWoW();
-            MoveCustom();
+            _eventManager?.Trigger(EVENT.TakeOverEventOn);
         }
         else
         {
-            if (_wanderScript != null && !_wanderScript.isActiveAndEnabled)
-            {
-                _wanderScript.enabled = true; 
-                _wanderScript.SendMessage("StartWander");              
-            }
-            if (_navMeshAgent != null && !_navMeshAgent.isActiveAndEnabled)
-            {
-                _navMeshAgent.enabled = true;                    
-            }
-
-            if (_animator != null)
-            {
-                if (_currentController != null && _currentController != _animator.runtimeAnimatorController)
-                {
-                    Debug.Log(_currentController);
-                    _animator.runtimeAnimatorController = _currentController;
-                }
-            }
+            _eventManager?.Trigger(EVENT.TakeOverEventOff);
         }
     }
 
     private void FixedUpdate()
     {
-        _cameraChangeScript.SendMessage("CameraSwitch", takeOver);
-        if (takeOver && _follower != null)
-        {
-            // object[] messages = new object[2];
-            // messages[0] = transform;
-            // messages[1] = new Vector3(0, 1.8f, 0);
-            // _cameraChangeScript.SendMessage("CameraFollow", messages);
-            
-            FollowObject(_follower.transform, transform, new Vector3(0, 1.8f, 0));
-        }    
+  
     }
 
-    private void FollowObject(Transform follower, Transform target, Vector3 offset)
-    {
-        float distance = Vector3.Distance(follower.position, target.position);
-        follower.position = Vector3.MoveTowards(follower.position, target.position + offset, Time.deltaTime * 100);
+    // private void FollowObject(Transform follower, Transform target, Vector3 offset)
+    // {
+    //     float distance = Vector3.Distance(follower.position, target.position);
+    //     follower.position = Vector3.MoveTowards(follower.position, target.position + offset, Time.deltaTime * 100);
         
-        var direction = target.position - follower.position;
-        var rotation = Quaternion.LookRotation(direction);
-        follower.rotation = Quaternion.LookRotation(target.forward);
-    }
+    //     var direction = target.position - follower.position;
+    //     var rotation = Quaternion.LookRotation(direction);
+    //     follower.rotation = Quaternion.LookRotation(target.forward);
+    // }
 
     private void MoveLikeWoW()
     {
@@ -201,11 +237,6 @@ public class MoveController : MonoBehaviour
         return _isGrounded;
     }
 
-    private IEnumerator StartAnimation()
-    {
-        yield return new WaitForSeconds((Random.Range(0, 200) / 100));
-        
-    }
-    
+
 }
 

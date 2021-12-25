@@ -41,12 +41,14 @@
      <Compile Include="Assets\polyperfect\- Scripts\AIScripts\MovementState.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\AIScripts\AudioManager.cs" />
      <Compile Include="Assets\Resources\Scripts\MoveController.cs" />
+     <Compile Include="Assets\Resources\Scripts\EventManager.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\IK\HumanBoneOffset.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\RandomCharacterPlacer.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\AIScripts\AnimalState.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\KillSwitch.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\AnimationControl.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\AIScripts\IdleState.cs" />
+     <Compile Include="Assets\Resources\Scripts\CameraChange.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\CustomPeople.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\AnimSpeed.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\AIScripts\WanderScript.cs" />
@@ -56,7 +58,9 @@
      <Compile Include="Assets\polyperfect\- Scripts\RandomInt.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\IK\PolyIk.cs" />
      <Compile Include="Assets\polyperfect\- Scripts\AIScripts\WanderManager.cs" />
-     <Compile Include="Assets\Resources\Scripts\CameraChange.cs" />
+     <Compile Include="Assets\Resources\Scripts\PlayerPool.cs" />
+     <Compile Include="Assets\Resources\Scripts\Player.cs" />
+     <Compile Include="Assets\Resources\Scripts\GameManager.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.25f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
