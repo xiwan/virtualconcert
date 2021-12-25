@@ -1,27 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using System;
 
 public class PlayerPool 
 {
     private static PlayerPool _instance;
 
+    private Random random;
+
     private Dictionary<int, Player> _playerPool = new Dictionary<int, Player>();
 
-    public static PlayerPool getInstance()
+    public static PlayerPool GetInstance()
     {
         if (_instance == null)
+        {
             _instance = new PlayerPool();
+            _instance.random = new System.Random(1000); 
+        }
+            
         return _instance;
     }
 
-    public void upsertData(int id, Player obj)
+    public void UpsertData(int id, Player obj)
     {
-        getInstance()._playerPool[id] = obj;
+        GetInstance()._playerPool[id] = obj;
     }
 
-    public void resetDataExcept(int id)
+    public void ResetDataExcept(int id)
     {
         foreach(KeyValuePair<int, Player> keyVal in _playerPool)
         {            
@@ -33,12 +39,12 @@ public class PlayerPool
         }
     }
 
-    public void resetData(int id)
+    public void ResetData(int id)
     {
         _playerPool[id].MoveController.takeOver = false;
     }
 
-    public int getSelectedId()
+    public int GetSelectedId()
     {
         foreach(KeyValuePair<int, Player> keyVal in _playerPool)
         {
@@ -64,11 +70,16 @@ public class PlayerPool
         if (_playerPool.Count > 0)
         {
             int[] keys = _playerPool.Keys.ToArray();
-            int pos = UnityEngine.Random.Range(0, keys.Length-1);
-            Debug.Log("return pos: " + pos);
+            int pos = random.Next(0, keys.Length);
+            //Debug.Log("return pos: " + pos);
             return _playerPool[keys[pos]];
         }
         return null;
+    }
+
+    public int CountPlayer()
+    {
+        return _playerPool.Count;
     }
 
 }

@@ -26,6 +26,16 @@ namespace PolyPerfect
             }
         }
 
+        public void SpawnAnimals(GameObject parent, int spawnAmmount = 10, float spawnSize = 5)
+        {
+            for (int i = 0; i < spawnAmmount; i++)
+            {
+                var value = Random.Range(0, characters.Length);
+
+                Instantiate(characters[value], RandomNavmeshLocation(spawnSize), Quaternion.identity, parent.transform);
+            }
+        }
+
         public Vector3 RandomNavmeshLocation(float radius)
         {
             Vector3 randomDirection = Random.insideUnitSphere * radius;

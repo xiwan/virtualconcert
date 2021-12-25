@@ -61,7 +61,7 @@ public class MoveController : MonoBehaviour
         }
 
         ((GameManager)_gm).SelectPlayer(_player.InstanceId);
-
+        StartCoroutine(OutlineCharacter(0.02f));
     }
 
     // Take Over Authority Off Event
@@ -86,13 +86,11 @@ public class MoveController : MonoBehaviour
             }
         }
         ((GameManager)_gm).DeselectPlayer(_player.InstanceId);
+        StartCoroutine(OutlineCharacter(0));
     }
 
     private void Awake()
     {
-         //_follower = GameObject.Find("Follower");
-         //_gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-
         if(_player == null)
         {
             _player = new Player();
@@ -101,11 +99,10 @@ public class MoveController : MonoBehaviour
             _player.TakeOver = false;
             _player.Follower = GameObject.Find("Follower");
  
-            // none of the players has been selected
-            //GameManager.getInstance().RegisterPlayer(_player); 
-            //((GameManager)_gm).RegisterPlayer(_player); 
-            PlayerPool.getInstance().upsertData(_player.InstanceId, _player);
+            // register player
+            PlayerPool.GetInstance().UpsertData(_player.InstanceId, _player);
         }
+
         if (_eventManager == null)
         {
             _eventManager = new EventManager();
@@ -136,9 +133,6 @@ public class MoveController : MonoBehaviour
         _wanderScript = transform.GetComponent<WanderScript>();
         _navMeshAgent = transform.GetComponent<NavMeshAgent>();
         _groundCheck = transform.Find("GroundCheck");
-
-        //_cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
-
     }
 
     // Update is called once per frame
@@ -158,16 +152,6 @@ public class MoveController : MonoBehaviour
     {
   
     }
-
-    // private void FollowObject(Transform follower, Transform target, Vector3 offset)
-    // {
-    //     float distance = Vector3.Distance(follower.position, target.position);
-    //     follower.position = Vector3.MoveTowards(follower.position, target.position + offset, Time.deltaTime * 100);
-        
-    //     var direction = target.position - follower.position;
-    //     var rotation = Quaternion.LookRotation(direction);
-    //     follower.rotation = Quaternion.LookRotation(target.forward);
-    // }
 
     private void MoveLikeWoW()
     {
@@ -235,6 +219,13 @@ public class MoveController : MonoBehaviour
     {
         _isGrounded = Physics.CheckSphere(obj.position, groundCheckRadius, layerMask);
         return _isGrounded;
+    }
+
+    private IEnumerator OutlineCharacter(float value)
+    {
+        yield return new WaitForSeconds((UnityEngine.Random.Range(0, 200) / 100));
+        Material[] materials = GetComponentInChildren<SkinnedMeshRenderer>().materials;
+        materials[1].SetFloat("_OutlineFactor", value);
     }
 
 

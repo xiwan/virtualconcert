@@ -1,21 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using PolyPerfect;
 
 public class GameManager : MonoBehaviour
 {
 
-    // private static GameManager _instance;
-
-    // public static GameManager getInstance()
-    // {
-    //     if (_instance == null)
-    //         _instance = new GameManager();
-
-    //     return _instance;
-    // }
-
     MonoBehaviour _cameraChangeScript;
+    MonoBehaviour _randomCharacterPlacerScript;
+
+    Text _ccuTex;
+
     public int selectedPlayer = 0;
 
     public int lastSelectedPlayer = 0;
@@ -24,23 +20,30 @@ public class GameManager : MonoBehaviour
 
     public bool pickAnyPlayer = false;
 
+    public float spawnRadius = 20;
+    public int spawnAmount = 20;
+
     public Dictionary<int, int> selectedPlayerDict = new Dictionary<int, int>();
+
+    [ContextMenu("Spawn Animals")]
+    void SpawnAnimals()
+    {
+        ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(GameObject.Find("People/AIs"), spawnAmount, spawnRadius);
+    }
 
     public void SelectPlayer(int playerId)
     {
-        //selectedPlayerQueue.Enqueue(playerId);
-        //selectedPlayerDict[playerId] = 1;
         lastSelectedPlayer = selectedPlayer;
         selectedPlayer = playerId;
         if (lastSelectedPlayer != selectedPlayer)
         {
-            PlayerPool.getInstance().resetDataExcept(selectedPlayer);
+            PlayerPool.GetInstance().ResetDataExcept(selectedPlayer);
         }
     }
 
     public Player PickAnyPlayer()
     {
-        var player = PlayerPool.getInstance().GetAnyPlayer();
+        var player = PlayerPool.GetInstance().GetAnyPlayer();
         if (player != null)
         {
             player.MoveController.takeOver = true;
@@ -55,30 +58,26 @@ public class GameManager : MonoBehaviour
         {
             selectedPlayer = playerId;
             lastSelectedPlayer = selectedPlayer;
-            PlayerPool.getInstance().resetDataExcept(playerId);
+            PlayerPool.GetInstance().ResetDataExcept(playerId);
         }
     }
     // Start is called before the first frame update
     void Start()
     {
-        _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
-        
-        //StartCoroutine(InitTask());
+        _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();       
+        _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
+        _ccuTex = GameObject.Find("Counter").GetComponent<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        NextTask();
+        SelectPlayerTask();
+
+        UpdateUITask();
     }
 
-    private IEnumerator InitTask()
-    {
-        yield return new WaitForSeconds((Random.Range(0, 200) / 100));
-        NextTask();
-    }
-
-    private void NextTask()
+    private void SelectPlayerTask()
     {
         if (resetCamera)
         {
@@ -102,7 +101,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            var player = PlayerPool.getInstance().GetPlayer(selectedPlayer);
+            var player = PlayerPool.GetInstance().GetPlayer(selectedPlayer);
             if (player != null)
             {
                 var follower = player.Follower;
@@ -112,9 +111,12 @@ public class GameManager : MonoBehaviour
             }
              
         }
-        //NextTask();
     }
 
+    private void UpdateUITask()
+    {
+        _ccuTex.text = "CCU: " + PlayerPool.GetInstance().CountPlayer();
+    }
     
 
 }

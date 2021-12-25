@@ -15,7 +15,7 @@ public class EventManager
 
     private static EventManager _instance;
 
-    public static EventManager getInstance()
+    public static EventManager GetInstance()
     {
         if (_instance == null)
         {
@@ -43,12 +43,12 @@ public class EventManager
 
     public void AddGlobalHandler(EVENT evt, Action action)
     {
-        getInstance().AddHandler(evt, action);
+        GetInstance().AddHandler(evt, action);
     }
 
     public void Broadcast (EVENT evt)
     {
-        getInstance().Trigger(evt);
+        GetInstance().Trigger(evt);
     }
 
 }
