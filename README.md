@@ -1,1 +1,58 @@
 # virtualconcert
+
+## description
+
+This is a live doc, may be edited at any moment in the future. 
+
+a Unity based project (Metaverse) to show the cabablity of making high-density population scene. My vision is : this scene is about a virtual concert, where people could dance and text with each other. Moreover, there is a messenger/hoster (idol) arranging the whole show.
+
+Rendering layer used some drop-to-used assets from polyperfect.
+
+Networking layer leveraged Mirror, for more detail, plz refer its official site.
+
+### role definition
+
+crowd: normal users connected from different terminals.
+
+messenger: the hoster supporting the show including observation (admin).
+
+star: the idol leading the crowd to interaction.
+
+## How to use it?
+
+### Game manager
+
+![game manager](static/image03.jpg "game manager")
+
+ - Reset Camera: Camera enters free mode, look at center stage and rotate around it.
+ - Pick Any Player: Camera enters following mode, pick a random player and controlled by WSAD.
+ - Spawn Radius: the area to generate npcs
+ - Spawn Amount: how many npcs for each generating action (right click Game Manager componnet, click "spawn animals");
+
+### Add new character & animation
+
+TBD
+
+### Networking
+
+TBD
+
+## screenshots
+
+### free mode
+![free camera](static/image01.jpg "free camera")
+
+
+### following mode
+![follow camera](static/image02.jpg "follow camera")
+
+
+## dependency
+
+[polyperfect](https://assetstore.unity.com/packages/3d/characters/humanoids/low-poly-animated-people-156748)
+
+[mixamo](https://www.mixamo.com/)
+
+
+
+
