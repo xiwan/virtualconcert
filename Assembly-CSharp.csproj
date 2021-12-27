@@ -53,35 +53,36 @@
     <UnityVersion>2020.3.25f1c1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/AIState.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/PlaySound.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/MovementState.cs" />
-    <Compile Include="Assets/Resources/Games/Scripts/PlayerPool.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/AudioManager.cs" />
-    <Compile Include="Assets/Resources/Games/Scripts/MoveController.cs" />
-    <Compile Include="Assets/Resources/Games/Scripts/EventManager.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/IK/HumanBoneOffset.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/RandomCharacterPlacer.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/AnimalState.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/KillSwitch.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AnimationControl.cs" />
-    <Compile Include="Assets/Resources/Games/Scripts/Player.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/IdleState.cs" />
-    <Compile Include="Assets/Resources/Games/Scripts/CameraChange.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/CustomPeople.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AnimSpeed.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/WanderScript.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/PolyMorpher.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/SurfaceRotation.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/AIStats.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/RandomInt.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/IK/PolyIk.cs" />
-    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/WanderManager.cs" />
-    <Compile Include="Assets/Resources/Games/Scripts/GameManager.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/AIState.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/PlaySound.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/MovementState.cs" />
+    <Compile Include="Assets/Resources/Scripts/PlayerPool.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/AudioManager.cs" />
+    <Compile Include="Assets/Resources/Scripts/MoveController.cs" />
+    <Compile Include="Assets/Resources/Scripts/EventManager.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/IK/HumanBoneOffset.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/RandomCharacterPlacer.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/AnimalState.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/KillSwitch.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AnimationControl.cs" />
+    <Compile Include="Assets/Resources/Scripts/Player.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/IdleState.cs" />
+    <Compile Include="Assets/Resources/Scripts/CameraChange.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/CustomPeople.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AnimSpeed.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/WanderScript.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/PolyMorpher.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/SurfaceRotation.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/AIStats.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/RandomInt.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/IK/PolyIk.cs" />
+    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/WanderManager.cs" />
+    <Compile Include="Assets/Resources/Scripts/GameManager.cs" />
+    <Compile Include="Assets/Resources/Scripts/IdolController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets/Resources/Games/Shaders/ObjectOutline.shader" />
-    <None Include="Assets/Resources/Customizable Skybox/Stylized Sky/Shaders/Stylized Sky.shader" />
+    <None Include="Assets/Resources/Shaders/ObjectOutline.shader" />
+    <None Include="Assets/Resources/Imported/Customizable Skybox/Stylized Sky/Shaders/Stylized Sky.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
