@@ -16,7 +16,7 @@ crowd: normal users connected from different terminals.
 
 messenger: the hoster supporting the show including observation (admin).
 
-star: the idol leading the crowd to interaction.
+star: the idol leading the crowd to interaction. default is priest and bgm is thriller :)
 
 ## How to use it?
 
@@ -40,7 +40,7 @@ TBD
 ## screenshots
 
 ### free mode
-![free camera](https://github.com/xiwan/virtualconcert/blob/main/Static/image01.jpg?raw=true  "free camera")
+![free camera](https://github.com/xiwan/virtualconcert/blob/main/Static/image04.jpg?raw=true  "free camera")
 
 
 ### following mode
