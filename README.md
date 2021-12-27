@@ -22,7 +22,7 @@ star: the idol leading the crowd to interaction.
 
 ### Game manager
 
-![game manager](static/image03.jpg "game manager")
+![game manager](https://github.com/xiwan/virtualconcert/blob/main/Static/image03.jpg?raw=true "game manager")
 
  - Reset Camera: Camera enters free mode, look at center stage and rotate around it.
  - Pick Any Player: Camera enters following mode, pick a random player and controlled by WSAD.
@@ -40,11 +40,11 @@ TBD
 ## screenshots
 
 ### free mode
-![free camera](static/image01.jpg "free camera")
+![free camera](https://github.com/xiwan/virtualconcert/blob/main/Static/image01.jpg?raw=true  "free camera")
 
 
 ### following mode
-![follow camera](static/image02.jpg "follow camera")
+![follow camera](https://github.com/xiwan/virtualconcert/blob/main/Static/image02.jpg?raw=true "follow camera")
 
 
 ## dependency
