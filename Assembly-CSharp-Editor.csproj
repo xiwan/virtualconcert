@@ -53,10 +53,10 @@
     <UnityVersion>2020.3.25f1c1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets/polyperfect/- Scripts/AIScripts/Editor/StatsTable.cs" />
-    <Compile Include="Assets/polyperfect/- Scripts/IK/Editor/PolyIkEditor.cs" />
-    <Compile Include="Assets/polyperfect/- Scripts/AIScripts/Editor/WanderManagerEditor.cs" />
-    <Compile Include="Assets/polyperfect/- Scripts/AIScripts/Editor/WanderScriptEditor.cs" />
+    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/Editor/StatsTable.cs" />
+    <Compile Include="Assets/Resources/polyperfect/- Scripts/IK/Editor/PolyIkEditor.cs" />
+    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/Editor/WanderManagerEditor.cs" />
+    <Compile Include="Assets/Resources/polyperfect/- Scripts/AIScripts/Editor/WanderScriptEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
