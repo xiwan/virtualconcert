@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/Resources/Shaders/ObjectOutline.shader" />
+    <None Include="Assets/Resources/Customizable Skybox/Stylized Sky/Shaders/Stylized Sky.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
