@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Mirror;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,11 +29,12 @@ namespace PolyPerfect
 
         public void SpawnAnimals(GameObject parent, int spawnAmmount = 10, float spawnSize = 5)
         {
+            var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
             for (int i = 0; i < spawnAmmount; i++)
             {
                 var value = Random.Range(0, characters.Length);
-
-                Instantiate(characters[value], RandomNavmeshLocation(spawnSize), Quaternion.identity, parent.transform);
+                var instance = Instantiate(characters[value], RandomNavmeshLocation(spawnSize), Quaternion.identity);
+                NetworkServer.Spawn(instance);
             }
         }
 
