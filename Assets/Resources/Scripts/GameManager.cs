@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     public Dictionary<int, int> selectedPlayerDict = new Dictionary<int, int>();
 
     [ContextMenu("Spawn Animals")]
-    void SpawnAnimals()
+    public void SpawnAnimals()
     {
         StartCoroutine(NetworkManagerSpawnAnimals());        
     }
@@ -133,12 +133,16 @@ public class GameManager : MonoBehaviour
 
         if (NetworkManager.singleton != null)
         {
-            var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
-            var instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(characters, parent, spawnAmount, spawnRadius);
-            for (int i = 0; i < instances.Length; i++)
+            if (NetworkManager.singleton.isNetworkActive)
             {
-                NetworkServer.Spawn(instances[i]);
+                var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
+                var instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(characters, parent, spawnAmount, spawnRadius);
+                for (int i = 0; i < instances.Length; i++)
+                {
+                    NetworkServer.Spawn(instances[i]);
+                }
             }
+            
         }
         else
         {
