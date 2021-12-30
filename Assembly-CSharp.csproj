@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\Bin\Debug\</OutputPath>
-    <DefineConstants>UNITY_2020_3_25;UNITY_2020_3;UNITY_2020;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;USE_SEARCH_ENGINE_API;SCENE_TEMPLATE_MODULE;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_MONO_BDWGC;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;PLATFORM_STANDALONE;PLATFORM_STANDALONE_OSX;UNITY_STANDALONE_OSX;UNITY_STANDALONE;ENABLE_GAMECENTER;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;ENABLE_SPATIALTRACKING;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_STANDARD_2_0;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_IG;UNITY_EDITOR_64;UNITY_EDITOR_OSX;ENABLE_CLOUD_FEATURES;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_LEGACY_INPUT_MANAGER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
+    <DefineConstants>UNITY_2020_3_25;UNITY_2020_3;UNITY_2020;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;USE_SEARCH_ENGINE_API;SCENE_TEMPLATE_MODULE;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_NATIVE_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_MONO_BDWGC;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;PLATFORM_STANDALONE;PLATFORM_STANDALONE_OSX;UNITY_STANDALONE_OSX;UNITY_STANDALONE;ENABLE_GAMECENTER;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;ENABLE_SPATIALTRACKING;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_STANDARD_2_0;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_IG;UNITY_EDITOR_64;UNITY_EDITOR_OSX;ENABLE_CLOUD_FEATURES;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_LEGACY_INPUT_MANAGER;MIRROR;MIRROR_17_0_OR_NEWER;MIRROR_18_0_OR_NEWER;MIRROR_24_0_OR_NEWER;MIRROR_26_0_OR_NEWER;MIRROR_27_0_OR_NEWER;MIRROR_28_0_OR_NEWER;MIRROR_29_0_OR_NEWER;MIRROR_30_0_OR_NEWER;MIRROR_30_5_2_OR_NEWER;MIRROR_32_1_2_OR_NEWER;MIRROR_32_1_4_OR_NEWER;MIRROR_35_0_OR_NEWER;MIRROR_35_1_OR_NEWER;MIRROR_37_0_OR_NEWER;MIRROR_38_0_OR_NEWER;MIRROR_39_0_OR_NEWER;MIRROR_40_0_OR_NEWER;MIRROR_41_0_OR_NEWER;MIRROR_42_0_OR_NEWER;MIRROR_43_0_OR_NEWER;MIRROR_44_0_OR_NEWER;MIRROR_46_0_OR_NEWER;MIRROR_47_0_OR_NEWER;MIRROR_53_0_OR_NEWER;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
@@ -53,36 +53,55 @@
     <UnityVersion>2020.3.25f1c1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/AIState.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/PlaySound.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/MovementState.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/AIState.cs" />
+    <Compile Include="Assets/Resources/Scripts/IdolController.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/PlaySound.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/MovementState.cs" />
     <Compile Include="Assets/Resources/Scripts/PlayerPool.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/AudioManager.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/AudioManager.cs" />
     <Compile Include="Assets/Resources/Scripts/MoveController.cs" />
     <Compile Include="Assets/Resources/Scripts/EventManager.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/IK/HumanBoneOffset.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/RandomCharacterPlacer.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/AnimalState.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/KillSwitch.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AnimationControl.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/IK/HumanBoneOffset.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/RandomCharacterPlacer.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/AnimalState.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/KillSwitch.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AnimationControl.cs" />
     <Compile Include="Assets/Resources/Scripts/Player.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/IdleState.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/IdleState.cs" />
     <Compile Include="Assets/Resources/Scripts/CameraChange.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/CustomPeople.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AnimSpeed.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/WanderScript.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/PolyMorpher.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/SurfaceRotation.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/AIStats.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/RandomInt.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/IK/PolyIk.cs" />
-    <Compile Include="Assets/Resources/Imported/polyperfect/- Scripts/AIScripts/WanderManager.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/CustomPeople.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AnimSpeed.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/WanderScript.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/PolyMorpher.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/SurfaceRotation.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/AIStats.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/RandomInt.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/IK/PolyIk.cs" />
+    <Compile Include="Assets/Imported/polyperfect/- Scripts/AIScripts/WanderManager.cs" />
     <Compile Include="Assets/Resources/Scripts/GameManager.cs" />
-    <Compile Include="Assets/Resources/Scripts/IdolController.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Script/DizzyDialogue.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Script/DizzyConvo.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Sample Scenes/Assets/Script/CircleMovement.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Sample Scenes/Assets/Script/SineMovement.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Script/DizzySubtitles.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Sample Scenes/Assets/Script/JumpWhenTalking.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Script/DizzyCondition.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Script/SubtitlePreset.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Script/DizzyLine.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Script/DizzySpeaker.cs" />
+    <Compile Include="Assets/Imported/DizzyDialogue/Sample Scenes/Assets/Script/CameraMover.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets/Imported/Mirror/Plugins/Mono.Cecil/Mono.CecilX.dll" />
+    <None Include="Assets/Imported/Mirror/Plugins/Mono.Cecil/Mono.CecilX.Mdb.dll" />
+    <None Include="Assets/Imported/Mirror/Plugins/Mono.Cecil/Mono.CecilX.Pdb.dll" />
+    <None Include="Assets/Imported/Mirror/Plugins/Mono.Cecil/Mono.CecilX.Rocks.dll" />
+    <None Include="Assets/Imported/Mirror/Version.txt" />
+    <None Include="Assets/Imported/Mirror/Readme.txt" />
+    <None Include="Assets/Imported/Mirror/Notice.txt" />
     <None Include="Assets/Resources/Shaders/ObjectOutline.shader" />
-    <None Include="Assets/Resources/Imported/Customizable Skybox/Stylized Sky/Shaders/Stylized Sky.shader" />
+    <None Include="Assets/Imported/Mirror/Plugins/Mono.Cecil/License.txt" />
+    <None Include="Assets/Imported/Customizable Skybox/Stylized Sky/Shaders/Stylized Sky.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -315,6 +334,18 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX">
+      <HintPath>Assets/Imported/Mirror/Plugins/Mono.Cecil/Mono.CecilX.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX.Mdb">
+      <HintPath>Assets/Imported/Mirror/Plugins/Mono.Cecil/Mono.CecilX.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX.Pdb">
+      <HintPath>Assets/Imported/Mirror/Plugins/Mono.Cecil/Mono.CecilX.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX.Rocks">
+      <HintPath>Assets/Imported/Mirror/Plugins/Mono.Cecil/Mono.CecilX.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>/Applications/Unity/Hub/Editor/2020.3.25f1c1/Unity.app/Contents/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -664,11 +695,11 @@
     <Reference Include="Cinemachine">
       <HintPath>Library/ScriptAssemblies/Cinemachine.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VSCode.Editor">
-      <HintPath>Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="com.unity.cinemachine.editor">
       <HintPath>Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VSCode.Editor">
+      <HintPath>Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
@@ -699,6 +730,46 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Mirror.Authenticators.csproj">
+      <Project>{926C6D0C-3D2D-DD88-7B3A-4224FC981819}</Project>
+      <Name>Mirror.Authenticators</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Components.csproj">
+      <Project>{3DF52BB3-4E70-9169-34DB-5856143D044F}</Project>
+      <Name>Mirror.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Examples.csproj">
+      <Project>{8A8667F7-3A94-507F-B3F4-BC423B307378}</Project>
+      <Name>Mirror.Examples</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.CompilerSymbols.csproj">
+      <Project>{C0C56105-2A77-9E01-1728-9E3F1C299E84}</Project>
+      <Name>Mirror.CompilerSymbols</Name>
+    </ProjectReference>
+    <ProjectReference Include="where-allocations.csproj">
+      <Project>{D9E8D980-590A-307E-3CDD-7261CFBAB975}</Project>
+      <Name>where-allocations</Name>
+    </ProjectReference>
+    <ProjectReference Include="Telepathy.csproj">
+      <Project>{D5A917E9-FC52-B7EE-5DBF-D072751C81A0}</Project>
+      <Name>Telepathy</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.csproj">
+      <Project>{71FADAC8-5B6F-6453-BA00-40CCE0E48DCF}</Project>
+      <Name>Mirror</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Editor.csproj">
+      <Project>{3C4C0A24-F570-A6BF-4E7D-2FF25CB61E11}</Project>
+      <Name>Mirror.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="kcp2k.csproj">
+      <Project>{EA093811-BB5C-39A9-8D75-2BBBDB001780}</Project>
+      <Name>kcp2k</Name>
+    </ProjectReference>
+    <ProjectReference Include="SimpleWebTransport.csproj">
+      <Project>{ED1D6FA4-563C-A6E2-4157-C6DC796ECD4A}</Project>
+      <Name>SimpleWebTransport</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

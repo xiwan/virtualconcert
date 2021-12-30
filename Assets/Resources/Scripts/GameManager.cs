@@ -1,5 +1,7 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using PolyPerfect;
@@ -28,7 +30,7 @@ public class GameManager : MonoBehaviour
     [ContextMenu("Spawn Animals")]
     void SpawnAnimals()
     {
-        ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(GameObject.Find("People/AIs"), spawnAmount, spawnRadius);
+        StartCoroutine(NetworkManagerSpawnAnimals());        
     }
 
     public void SelectPlayer(int playerId)
@@ -67,6 +69,8 @@ public class GameManager : MonoBehaviour
         _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();       
         _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
         _ccuTex = GameObject.Find("Counter").GetComponent<Text>();
+
+        StartCoroutine(UpdateUITask());
     }
 
     // Update is called once per frame
@@ -74,7 +78,7 @@ public class GameManager : MonoBehaviour
     {
         SelectPlayerTask();
 
-        UpdateUITask();
+        //UpdateUITask();
     }
 
     private void SelectPlayerTask()
@@ -113,10 +117,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdateUITask()
+    IEnumerator UpdateUITask()
     {
-        _ccuTex.text = "CCU: " + PlayerPool.GetInstance().CountPlayer();
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+            _ccuTex.text = "CCU: " + PlayerPool.GetInstance().CountPlayer();
+        }
     }
-    
+
+    IEnumerator NetworkManagerSpawnAnimals()
+    {
+        yield return new WaitForSeconds((Random.Range(0, 200) / 100));
+        var parent = GameObject.Find("People/AIs");
+
+        if (NetworkManager.singleton != null)
+        {
+            var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
+            var instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(characters, parent, spawnAmount, spawnRadius);
+            for (int i = 0; i < instances.Length; i++)
+            {
+                NetworkServer.Spawn(instances[i]);
+            }
+        }
+        else
+        {
+            ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(parent, spawnAmount, spawnRadius);
+        }
+    }
+
+
 
 }
