@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public float spawnRadius = 20;
     public int spawnAmount = 20;
 
+    public Transform NetworkAttach;
+
     public Dictionary<int, int> selectedPlayerDict = new Dictionary<int, int>();
 
     [ContextMenu("Spawn Animals")]
@@ -133,16 +135,16 @@ public class GameManager : MonoBehaviour
 
         if (NetworkManager.singleton != null)
         {
-            if (NetworkManager.singleton.isNetworkActive)
+            if (NetworkManager.singleton.isNetworkActive && NetworkAttach != null)
             {
                 var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
                 var instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(characters, parent, spawnAmount, spawnRadius);
                 for (int i = 0; i < instances.Length; i++)
                 {
+                    var networkAttach = Instantiate(NetworkAttach, instances[i].transform, false);
                     NetworkServer.Spawn(instances[i]);
                 }
-            }
-            
+            } 
         }
         else
         {
