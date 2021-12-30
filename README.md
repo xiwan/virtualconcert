@@ -35,7 +35,10 @@ TBD
 
 ### Networking
 
-TBD
+For purpose of utilizing Mirror, a special prefab called "NetworkAttach" was created.
+It was pretty easy, attaching it to the npc gameobject in the runtime would do the networking trick.
+
+![network attach](https://github.com/xiwan/virtualconcert/blob/main/Static/image05.jpg?raw=true  "network attach")
 
 ## screenshots
 
