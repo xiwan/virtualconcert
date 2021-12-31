@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.39568225, g: 0.14989173, b: 0.18825442, a: 1}
+  m_IndirectSpecularColor: {r: 0.395682, g: 0.14989096, b: 0.18825382, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -659,7 +659,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 356288735}
-  m_LocalRotation: {x: 0.13719551, y: -0.26031548, z: 0.037397187, w: 0.9549946}
+  m_LocalRotation: {x: 0.13719551, y: -0.26031545, z: 0.03739719, w: 0.9549946}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -903,7 +903,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 481982140}
-  m_LocalRotation: {x: 0.18304025, y: -0.0024155057, z: 0.00044973422, w: 0.9831024}
+  m_LocalRotation: {x: 0.18304025, y: -0.0024154887, z: 0.0004497311, w: 0.9831024}
   m_LocalPosition: {x: 2.7000003, y: 3.6, z: -29.899998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1316,7 +1316,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.18304025, y: -0.0024155057, z: 0.00044973422, w: 0.9831024}
+  m_LocalRotation: {x: 0.18304025, y: -0.0024154887, z: 0.0004497311, w: 0.9831024}
   m_LocalPosition: {x: 2.7000003, y: 3.6, z: -29.899998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1749,17 +1749,7 @@ MonoBehaviour:
   spawnAmmount: 100
   characters:
   - {fileID: 5382129742942840324, guid: ec9b6fbc243df485991d590f0015a895, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6682788439767141633, guid: 6f4eef6df4e2f7645a624d20159c4d9a, type: 3}
 --- !u!1 &1464832305
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,11 +1817,11 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 955083567317733144, guid: 60bfc6e40622edc4b95e0c3b8ebf6887, type: 3}
+  playerPrefab: {fileID: 0}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 5382129742942840324, guid: ec9b6fbc243df485991d590f0015a895, type: 3}
+  - {fileID: 1515691249674516757, guid: a31b2b508823a6641ab7d4e00ad26e01, type: 3}
 --- !u!4 &1464832308
 Transform:
   m_ObjectHideFlags: 0

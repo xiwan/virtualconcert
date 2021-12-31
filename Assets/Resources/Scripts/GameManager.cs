@@ -138,11 +138,25 @@ public class GameManager : MonoBehaviour
             if (NetworkManager.singleton.isNetworkActive && NetworkAttach != null)
             {
                 var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
-                var instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(characters, parent, spawnAmount, spawnRadius);
+                var instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(parent, spawnAmount, spawnRadius);
+
+                //for (int i = 0; i < instances.Length; i++)
+                //{
+
+                //    //instances[i].AddComponent<NetworkIdentity>();
+                //    //instances[i].AddComponent<NetworkTransform>();
+                //    //var na = instances[i].AddComponent<NetworkAnimator>();
+                //    //na.animator = instances[i].GetComponent<Animator>();
+                //    NetworkServer.Spawn(instances[i]);
+                //}
+
                 for (int i = 0; i < instances.Length; i++)
                 {
                     var networkAttach = Instantiate(NetworkAttach, instances[i].transform, false);
-                    NetworkServer.Spawn(instances[i]);
+                    networkAttach.name = NetworkAttach.name + networkAttach.GetInstanceID();
+                    networkAttach.GetComponent<NetworkAnimator>().animator = instances[i].GetComponent<Animator>();
+                    //var networkAttachPath = "/" + instances[i].name + "/" + networkAttach.name;
+                    NetworkServer.Spawn(networkAttach.gameObject);
                 }
             } 
         }

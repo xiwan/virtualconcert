@@ -28,7 +28,7 @@ namespace PolyPerfect
             SpawnAnimals(parent, spawnAmmount, spawnSize);
         }
 
-        public void SpawnAnimals(GameObject parent, int spawnAmmount = 10, float spawnSize = 5)
+        public GameObject[] SpawnAnimals(GameObject parent, int spawnAmmount = 10, float spawnSize = 5)
         {
             //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
             //for (int i = 0; i < spawnAmmount; i++)
@@ -37,7 +37,7 @@ namespace PolyPerfect
             //    var instance = Instantiate(characters[value], RandomNavmeshLocation(spawnSize), Quaternion.identity);
             //    NetworkServer.Spawn(instance);
             //}
-            SpawnAnimals(characters, parent, spawnAmmount, spawnSize);
+            return SpawnAnimals(characters, parent, spawnAmmount, spawnSize);
 
         }
 
@@ -48,6 +48,7 @@ namespace PolyPerfect
             {
                 var value = Random.Range(0, characters.Length);
                 var instance = Instantiate(characters[value], RandomNavmeshLocation(spawnSize), Quaternion.identity, parent.transform);
+                instance.name = characters[value].name + instance.GetInstanceID();
                 instances[i] = instance;
             }
             return instances;
