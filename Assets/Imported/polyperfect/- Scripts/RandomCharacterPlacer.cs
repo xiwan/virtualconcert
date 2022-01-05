@@ -54,6 +54,26 @@ namespace PolyPerfect
             return instances;
         }
 
+        public GameObject[] SpawnAnimals(GameObject mainRig, Avatar[] characters, GameObject parent, int spawnAmmount = 10, float spawnSize = 5)
+        {
+            GameObject[] instances = new GameObject[spawnAmmount];
+            for (int i = 0; i < spawnAmmount; i++)
+            {
+                var value = Random.Range(0, characters.Length);
+                var avatar = characters[value];
+                var instance = Instantiate(mainRig, RandomNavmeshLocation(spawnSize), Quaternion.identity, parent.transform);
+
+                var spawnedInstance = AvatarManager.SpawnFromAvatar(instance, avatar);
+                if (spawnedInstance != null)
+                {
+                    instances[i] = instance;
+                }
+                
+            }
+            return instances;
+        }
+
+
         public Vector3 RandomNavmeshLocation(float radius)
         {
             Vector3 randomDirection = Random.insideUnitSphere * radius;

@@ -29,10 +29,94 @@ public class GameManager : MonoBehaviour
 
     public Dictionary<int, int> selectedPlayerDict = new Dictionary<int, int>();
 
+    public GameObject MainRig;
+
+    private List<Avatar> npcPrefabsList = new List<Avatar>();
+
+    private void LoadPrefabs()
+    {
+        var man01 = new Avatar() {
+            id = 1,
+            aname = "man-astronaut",
+            animatorController = "MoonwalkController"
+        };
+        var man02 = new Avatar()
+        {
+            id = 2,
+            aname = "man-basketball-player",
+            animatorController = "BellyController"
+        };
+        var man03 = new Avatar()
+        {
+            id = 3,
+            aname = "man-boxer",
+            animatorController = "BrooklynuprockController"
+        };
+        var man04 = new Avatar()
+        {
+            id = 4,
+            aname = "man-business",
+            animatorController = "FlairController"
+        };
+        var man05 = new Avatar()
+        {
+            id = 5,
+            aname = "man-casual",
+            animatorController = "HouseController"
+        };
+        var man06 = new Avatar()
+        {
+            id = 6,
+            aname = "man-chef",
+            animatorController = "JazzController"
+        };
+        var man07 = new Avatar()
+        {
+            id = 7,
+            aname = "man-clown",
+            animatorController = "MoonwalkController"
+        };
+        var man08 = new Avatar()
+        {
+            id = 8,
+            aname = "man-construction-worker",
+            animatorController = "NorthsoulController"
+        };
+        var man09 = new Avatar()
+        {
+            id = 9,
+            aname = "man-cowboy",
+            animatorController = "SambaController"
+        };
+        var man10 = new Avatar()
+        {
+            id = 10,
+            aname = "man-cyclist",
+            animatorController = "YmcaController"
+        };
+        npcPrefabsList.Add(man01);
+        npcPrefabsList.Add(man02);
+        npcPrefabsList.Add(man03);
+        npcPrefabsList.Add(man04);
+        npcPrefabsList.Add(man05);
+        npcPrefabsList.Add(man06);
+        npcPrefabsList.Add(man07);
+        npcPrefabsList.Add(man08);
+        npcPrefabsList.Add(man09);
+        npcPrefabsList.Add(man10);
+    }
+
+    public Avatar[] Avatars { get; set; }
+
     [ContextMenu("Spawn Animals")]
     public void SpawnAnimals()
     {
         StartCoroutine(NetworkManagerSpawnAnimals());        
+    }
+
+    public static GameManager getGM()
+    { 
+        return GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public void SelectPlayer(int playerId)
@@ -65,6 +149,12 @@ public class GameManager : MonoBehaviour
             PlayerPool.GetInstance().ResetDataExcept(playerId);
         }
     }
+
+    void Awake()
+    {
+        LoadPrefabs();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -137,27 +227,45 @@ public class GameManager : MonoBehaviour
         {
             if (NetworkManager.singleton.isNetworkActive && NetworkAttach != null)
             {
-                var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
-                var instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(parent, spawnAmount, spawnRadius);
+                //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
+                var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript)
+                    .SpawnAnimals(MainRig, npcPrefabsList.ToArray(), parent, spawnAmount, spawnRadius);
 
-                //for (int i = 0; i < instances.Length; i++)
-                //{
-
-                //    //instances[i].AddComponent<NetworkIdentity>();
-                //    //instances[i].AddComponent<NetworkTransform>();
-                //    //var na = instances[i].AddComponent<NetworkAnimator>();
-                //    //na.animator = instances[i].GetComponent<Animator>();
-                //    NetworkServer.Spawn(instances[i]);
-                //}
-
-                for (int i = 0; i < instances.Length; i++)
+                var _avatarList = new List<Avatar>();
+                for (int i = 0; i < _instances.Length; i++)
                 {
-                    var networkAttach = Instantiate(NetworkAttach, instances[i].transform, false);
-                    networkAttach.name = NetworkAttach.name + networkAttach.GetInstanceID();
-                    networkAttach.GetComponent<NetworkAnimator>().animator = instances[i].GetComponent<Animator>();
-                    //var networkAttachPath = "/" + instances[i].name + "/" + networkAttach.name;
-                    NetworkServer.Spawn(networkAttach.gameObject);
+                    var _fullname = _instances[i].name;
+                    var _avatarname = _fullname.Split('_')[0];
+                    var _avatarid = _fullname.Split('_')[1];
+                    var _avatar = new Avatar()
+                    {
+                        id = ToolsManager.ParseInt32(_avatarid),
+                        type = 1, // ai
+                        aname = _avatarname,
+                        animatorController = _instances[i].GetComponent<Animator>().runtimeAnimatorController.name,
+                        postion = _instances[i].transform.position,
+                        rotation = _instances[i].transform.rotation,
+                        scale = _instances[i].transform.localScale
+                    };
+
+                    var aiAvatar = _instances[i].GetComponent<VirtualAvatarPlayer>();
+                    aiAvatar.avatar = _avatar;
+
+                    // server spawn the instance
+                    NetworkServer.Spawn(_instances[i]);
+                    //_avatarList.Add(_avatar);
                 }
+                
+
+                VirtualResponse msg = new VirtualResponse
+                {
+                    messageId = 0x0002,
+                    message = new VirtualAvatarCreateMessage
+                    {
+                        avatars = _avatarList.ToArray()
+                    }
+                };
+                //NetworkServer.SendToAll(msg);               
             } 
         }
         else

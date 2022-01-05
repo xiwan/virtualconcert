@@ -1,15 +1,15 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player 
+public class Player : NetworkBehaviour
 {
     int instanceId;
     bool takeOver;
     GameObject follower;
 
     MoveController moveController;
-
 
     public int InstanceId
     {
@@ -41,4 +41,5 @@ public class Player
             takeOver = value;
         }
     }
+
 }
