@@ -83,7 +83,8 @@ namespace Mirror
             new Dictionary<Guid, UnSpawnDelegate>();
 
         // spawning
-        static bool isSpawnFinished;
+        // internal for tests
+        internal static bool isSpawnFinished;
 
         // Disabled scene objects that can be spawned again, by sceneId.
         internal static readonly Dictionary<ulong, NetworkIdentity> spawnableObjects =
@@ -249,7 +250,7 @@ namespace Mirror
             if (connection != null)
             {
                 // reset network time stats
-                NetworkTime.Reset();
+                NetworkTime.ResetStatics();
 
                 // reset unbatcher in case any batches from last session remain.
                 unbatcher = new Unbatcher();
@@ -451,7 +452,6 @@ namespace Mirror
             // it's not needed on client. it's always NetworkClient.connection.
             void HandlerWrapped(NetworkConnection _, T value) => handler(value);
             handlers[msgType] = MessagePacking.WrapHandler((Action<NetworkConnection, T>) HandlerWrapped, requireAuthentication);
-            //Debug.Log($"[Mirror] Registered handler for {typeof(T).Name}: {msgType}");
         }
 
         /// <summary>Replace a handler for a particular message type. Should require authentication by default.</summary>
@@ -1021,12 +1021,6 @@ namespace Mirror
             }
         }
 
-        internal static void ChangeOwner(NetworkIdentity identity, ChangeOwnerMessage message)
-        {
-            identity.hasAuthority = message.isOwner;
-            identity.NotifyAuthority();
-        }
-
         // Finds Existing Object with NetId or spawns a new one using AssetId or sceneId
         internal static bool FindOrSpawnObject(SpawnMessage message, out NetworkIdentity identity)
         {
@@ -1268,7 +1262,7 @@ namespace Mirror
 
         internal static void OnObjectDestroy(ObjectDestroyMessage message) => DestroyObject(message.netId);
 
-        public static void OnSpawn(SpawnMessage message)
+        internal static void OnSpawn(SpawnMessage message)
         {
             // Debug.Log($"Client spawn handler instantiating netId={msg.netId} assetID={msg.assetId} sceneId={msg.sceneId:X} pos={msg.position}");
             if (FindOrSpawnObject(message, out NetworkIdentity identity))
@@ -1285,6 +1279,24 @@ namespace Mirror
                 ChangeOwner(identity, message);
             else
                 Debug.LogError($"OnChangeOwner: Could not find object with netId {message.netId}");
+        }
+
+        internal static void ChangeOwner(NetworkIdentity identity, ChangeOwnerMessage message)
+        {
+            identity.hasAuthority = message.isOwner;
+            identity.NotifyAuthority();
+
+            identity.isLocalPlayer = message.isLocalPlayer;
+            if (identity.isLocalPlayer)
+                localPlayer = identity;
+            else if (localPlayer == identity)
+            {
+                // localPlayer may already be assigned to something else
+                // so only make it null if it's this identity.
+                localPlayer = null;
+            }
+
+            CheckForLocalPlayer(identity);
         }
 
         internal static void CheckForLocalPlayer(NetworkIdentity identity)
@@ -1415,29 +1427,51 @@ namespace Mirror
         }
 
         /// <summary>Shutdown the client.</summary>
+        // RuntimeInitializeOnLoadMethod -> fast playmode without domain reload
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Shutdown()
         {
             //Debug.Log("Shutting down client.");
+
+            // calls prefabs.Clear();
+            // calls spawnHandlers.Clear();
+            // calls unspawnHandlers.Clear();
             ClearSpawners();
-            spawnableObjects.Clear();
-            ready = false;
-            isSpawnFinished = false;
+
+            // calls spawned.Clear() if no exception occurs
             DestroyAllClientObjects();
-            connectState = ConnectState.None;
-            handlers.Clear();
+
             spawned.Clear();
+            handlers.Clear();
+            spawnableObjects.Clear();
+
+            // sets nextNetworkId to 1
+            // sets clientAuthorityCallback to null
+            // sets previousLocalPlayer to null
+            NetworkIdentity.ResetStatics();
+
             // disconnect the client connection.
             // we do NOT call Transport.Shutdown, because someone only called
             // NetworkClient.Shutdown. we can't assume that the server is
             // supposed to be shut down too!
             if (Transport.activeTransport != null)
                 Transport.activeTransport.ClientDisconnect();
+
+            // reset statics
+            connectState = ConnectState.None;
             connection = null;
+            localPlayer = null;
+            ready = false;
+            isSpawnFinished = false;
+            isLoadingScene = false;
+
+            unbatcher = new Unbatcher();
 
             // clear events. someone might have hooked into them before, but
             // we don't want to use those hooks after Shutdown anymore.
             OnConnectedEvent = null;
             OnDisconnectedEvent = null;
+            OnErrorEvent = null;
         }
     }
 }

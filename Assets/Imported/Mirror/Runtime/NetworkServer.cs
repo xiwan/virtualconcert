@@ -60,17 +60,22 @@ namespace Mirror
             if (initialized)
                 return;
 
-            initialized = true;
             // Debug.Log($"NetworkServer Created version {Version.Current}");
 
             //Make sure connections are cleared in case any old connections references exist from previous sessions
             connections.Clear();
 
+            // reset Interest Management so that rebuild intervals
+            // start at 0 when starting again.
+            if (aoi != null) aoi.Reset();
+
             // reset NetworkTime
-            NetworkTime.Reset();
+            NetworkTime.ResetStatics();
 
             Debug.Assert(Transport.activeTransport != null, "There was no active transport when calling NetworkServer.Listen, If you are calling Listen manually then make sure to set 'Transport.activeTransport' first");
             AddTransportHandlers();
+
+            initialized = true;
         }
 
         static void AddTransportHandlers()
@@ -151,6 +156,8 @@ namespace Mirror
         }
 
         /// <summary>Shuts down the server and disconnects all clients</summary>
+        // RuntimeInitializeOnLoadMethod -> fast playmode without domain reload
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Shutdown()
         {
             if (initialized)
@@ -169,17 +176,34 @@ namespace Mirror
                 Transport.activeTransport.ServerStop();
                 initialized = false;
             }
+
+            // Reset all statics here....
             dontListen = false;
             active = false;
-            handlers.Clear();
+            isLoadingScene = false;
 
+            localConnection = null;
+
+            connections.Clear();
+            connectionsCopy.Clear();
+            handlers.Clear();
+            newObservers.Clear();
+
+            // this calls spawned.Clear()
             CleanupSpawned();
-            NetworkIdentity.ResetNextNetworkId();
+
+            // sets nextNetworkId to 1
+            // sets clientAuthorityCallback to null
+            // sets previousLocalPlayer to null
+            NetworkIdentity.ResetStatics();
 
             // clear events. someone might have hooked into them before, but
             // we don't want to use those hooks after Shutdown anymore.
             OnConnectedEvent = null;
             OnDisconnectedEvent = null;
+            OnErrorEvent = null;
+
+            if (aoi != null) aoi.Reset();
         }
 
         // connections /////////////////////////////////////////////////////////
@@ -477,7 +501,6 @@ namespace Mirror
                     {
                         // make remoteTimeStamp available to the user
                         connection.remoteTimeStamp = remoteTimestamp;
-                        //Debug.Log($"[Mirror] Updated remote timestap of connection{connection.connectionId}: {remoteTimestamp}");
 
                         // handle message
                         if (!UnpackAndInvoke(connection, reader, channelId))
@@ -567,6 +590,8 @@ namespace Mirror
 
         // message handlers ////////////////////////////////////////////////////
         /// <summary>Register a handler for message type T. Most should require authentication.</summary>
+        // TODO obsolete this some day to always use the channelId version.
+        //      all handlers in this version are wrapped with 1 extra action.
         public static void RegisterHandler<T>(Action<NetworkConnection, T> handler, bool requireAuthentication = true)
             where T : struct, NetworkMessage
         {
@@ -576,7 +601,19 @@ namespace Mirror
                 Debug.LogWarning($"NetworkServer.RegisterHandler replacing handler for {typeof(T).FullName}, id={msgType}. If replacement is intentional, use ReplaceHandler instead to avoid this warning.");
             }
             handlers[msgType] = MessagePacking.WrapHandler(handler, requireAuthentication);
-            //Debug.Log($"[Mirror] Registered handler for {typeof(T).Name}: {msgType}");
+        }
+
+        /// <summary>Register a handler for message type T. Most should require authentication.</summary>
+        // This version passes channelId to the handler.
+        public static void RegisterHandler<T>(Action<NetworkConnection, T, int> handler, bool requireAuthentication = true)
+            where T : struct, NetworkMessage
+        {
+            ushort msgType = MessagePacking.GetId<T>();
+            if (handlers.ContainsKey(msgType))
+            {
+                Debug.LogWarning($"NetworkServer.RegisterHandler replacing handler for {typeof(T).FullName}, id={msgType}. If replacement is intentional, use ReplaceHandler instead to avoid this warning.");
+            }
+            handlers[msgType] = MessagePacking.WrapHandler(handler, requireAuthentication);
         }
 
         /// <summary>Replace a handler for message type T. Most should require authentication.</summary>
@@ -764,7 +801,12 @@ namespace Mirror
 
             Respawn(identity);
 
-            if (!keepAuthority)
+            if (keepAuthority)
+                // This needs to be sent to clear isLocalPlayer on
+                // client while keeping hasAuthority true
+                SendChangeOwnerMessage(previousPlayer, conn);
+            else
+                // This clears both isLocalPlayer and hasAuthority on client
                 previousPlayer.RemoveClientAuthority();
 
             return true;
@@ -808,14 +850,9 @@ namespace Mirror
         // calling SetClientReady().
         public static void SetClientNotReady(NetworkConnection conn)
         {
-            if (conn.isReady)
-            {
-                // Debug.Log($"PlayerNotReady {conn}");
-                conn.isReady = false;
-                conn.RemoveFromObservingsObservers();
-
-                conn.Send(new NotReadyMessage());
-            }
+            conn.isReady = false;
+            conn.RemoveFromObservingsObservers();
+            conn.Send(new NotReadyMessage());
         }
 
         /// <summary>Marks all connected clients as no longer ready.</summary>
@@ -872,11 +909,26 @@ namespace Mirror
         // remote calls ////////////////////////////////////////////////////////
         // Handle command from specific player, this could be one of multiple
         // players on a single client
-        static void OnCommandMessage(NetworkConnection conn, CommandMessage msg)
+        static void OnCommandMessage(NetworkConnection conn, CommandMessage msg, int channelId)
         {
+            if (!conn.isReady)
+            {
+                // Clients may be set NotReady due to scene change or other game logic by user, e.g. respawning.
+                // Ignore commands that may have been in flight before client received NotReadyMessage message.
+                // Unreliable messages may be out of order, so don't spam warnings for those.
+                if (channelId == Channels.Reliable)
+                    Debug.LogWarning("Command received while client is not ready.\nThis may be ignored if client intentionally set NotReady.");
+                return;
+            }
+
             if (!spawned.TryGetValue(msg.netId, out NetworkIdentity identity))
             {
-                Debug.LogWarning($"Spawned object not found when handling Command message [netId={msg.netId}]");
+                // over reliable channel, commands should always come after spawn.
+                // over unreliable, they might come in before the object was spawned.
+                // for example, NetworkTransform.
+                // let's not spam the console for unreliable out of order messages.
+                if (channelId == Channels.Reliable)
+                    Debug.LogWarning($"Spawned object not found when handling Command message [netId={msg.netId}]");
                 return;
             }
 
@@ -953,11 +1005,21 @@ namespace Mirror
 
         internal static void SendChangeOwnerMessage(NetworkIdentity identity, NetworkConnection conn)
         {
-            if (identity.serverOnly) return;
+            // Don't send if identity isn't spawned or only exists on server
+            if (identity.netId == 0 || identity.serverOnly) return;
+
+            // Don't send if conn doesn't have the identity spawned yet
+            // May be excluded from the client by interest management
+            if (!conn.observing.Contains(identity)) return;
 
             //Debug.Log($"Server SendChangeOwnerMessage: name={identity.name} netid={identity.netId}");
 
-            conn.Send(new ChangeOwnerMessage { netId = identity.netId, isOwner = identity.connectionToClient == conn });
+            conn.Send(new ChangeOwnerMessage
+            {
+                netId = identity.netId,
+                isOwner = identity.connectionToClient == conn,
+                isLocalPlayer = conn.identity == identity
+            });
         }
 
         static void SpawnObject(GameObject obj, NetworkConnection ownerConnection)
@@ -1107,7 +1169,9 @@ namespace Mirror
             foreach (NetworkIdentity identity in identities)
             {
                 if (ValidateSceneObject(identity))
-                    Spawn(identity.gameObject);
+                    // pass connection so that authority is not lost when server loads a scene
+                    // https://github.com/vis2k/Mirror/pull/2987
+                    Spawn(identity.gameObject, identity.connectionToClient);
             }
 
             return true;
@@ -1237,7 +1301,12 @@ namespace Mirror
 
         static void DestroyObject(NetworkIdentity identity, DestroyMode mode)
         {
-            if (aoi)
+            // Debug.Log($"DestroyObject instance:{identity.netId}");
+
+            // only call OnRebuildObservers while active,
+            // not while shutting down
+            // (https://github.com/vis2k/Mirror/issues/2977)
+            if (active && aoi)
             {
                 // This calls user code which might throw exceptions
                 // We don't want this to leave us in bad state
@@ -1250,7 +1319,8 @@ namespace Mirror
                     Debug.LogException(e);
                 }
             }
-            // Debug.Log($"DestroyObject instance:{identity.netId}");
+
+            // remove from NetworkServer (this) dictionary
             spawned.Remove(identity.netId);
 
             identity.connectionToClient?.RemoveOwnedObject(identity);
@@ -1268,6 +1338,9 @@ namespace Mirror
                 // NotifyAuthority which invokes OnStopAuthority if hasAuthority.
                 identity.hasAuthority = false;
                 identity.NotifyAuthority();
+
+                // remove from NetworkClient dictionary
+                NetworkClient.spawned.Remove(identity.netId);
             }
 
             // we are on the server. call OnStopServer.
@@ -1328,7 +1401,8 @@ namespace Mirror
         }
 
         // allocate newObservers helper HashSet only once
-        static readonly HashSet<NetworkConnection> newObservers = new HashSet<NetworkConnection>();
+        // internal for tests
+        internal static readonly HashSet<NetworkConnection> newObservers = new HashSet<NetworkConnection>();
 
         // rebuild observers default method (no AOI) - adds all connections
         static void RebuildObserversDefault(NetworkIdentity identity, bool initialize)
@@ -1580,7 +1654,8 @@ namespace Mirror
 
         // NetworkLateUpdate called after any Update/FixedUpdate/LateUpdate
         // (we add this to the UnityEngine in NetworkLoop)
-        static readonly List<NetworkConnectionToClient> connectionsCopy =
+        // internal for tests
+        internal static readonly List<NetworkConnectionToClient> connectionsCopy =
             new List<NetworkConnectionToClient>();
 
         static void Broadcast()

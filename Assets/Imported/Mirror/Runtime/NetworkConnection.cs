@@ -9,7 +9,7 @@ namespace Mirror
     {
         public const int LocalConnectionId = 0;
 
-        // NetworkIdentities that this connection can see
+        /// <summary>NetworkIdentities that this connection can see</summary>
         // TODO move to server's NetworkConnectionToClient?
         public readonly HashSet<NetworkIdentity> observing = new HashSet<NetworkIdentity>();
 
@@ -133,8 +133,6 @@ namespace Mirror
                 MessagePacking.Pack(message, writer);
                 NetworkDiagnostics.OnSend(message, channelId, writer.Position, 1);
                 Send(writer.ToArraySegment(), channelId);
-                if (typeof(T) != typeof(NetworkPingMessage) && typeof(T) != typeof(NetworkPongMessage))
-                    Debug.Log($"[Mirror] Sent {typeof(T).Name}, size: {writer.Position}");
             }
         }
 
