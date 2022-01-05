@@ -12,11 +12,21 @@ Networking layer leveraged Mirror, for more detail, plz refer its official site.
 
 ### role definition
 
-crowd: normal users connected from different terminals.
+participant: normal users connected from different terminals.
+  - Login, avatar, nickname, purchase items
+  - In event: preset emote: dance, waving and etc.
+  - Interaction: text, spatial voice, walk, run, jump
+  - Regular height with capsule body
 
-messenger: the hoster supporting the show including observation (admin).
+messenger: the hoster supporting the show including observation (admin). His duty includes:
+  - pull up a room for hosting an event
+  - set up the event model (music, show, or modular and plugable event)
+  - manage the lifecycle of event (build up scene, make the scene open to connect, mute/ban/kick participant, start/stop the event, destory the room and etc.)
 
 star: the idol leading the crowd to interaction. default is priest and bgm is thriller :)
+  - Interaction: 1-n text, 1-n voice, 1-n effect
+  - Live action: trigger fireworks, play music
+  - Gigantic avatar
 
 ## How to use it?
 
