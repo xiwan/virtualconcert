@@ -59,6 +59,8 @@ It was pretty easy, attaching it to the npc gameobject in the runtime would do t
 ### following mode
 ![follow camera](https://github.com/xiwan/virtualconcert/blob/main/Static/image02.jpg?raw=true "follow camera")
 
+### cs mode (left is server, right is client)
+![follow camera](https://github.com/xiwan/virtualconcert/blob/main/Static/image06.jpg?raw=true "cs mode")
 
 ## dependency
 
