@@ -10,7 +10,7 @@ public class MoveController : MonoBehaviour
 {
     private CharacterController _characterController;
     private MonoBehaviour _wanderScript;
-    private MonoBehaviour _gm;
+    private GameManager _gm;
     private NavMeshAgent _navMeshAgent;
     private Animator _animator;
     //private GameObject _follower;
@@ -60,7 +60,7 @@ public class MoveController : MonoBehaviour
             }   
         }
 
-        ((GameManager)_gm).SelectPlayer(_player.InstanceId);
+        _gm.SelectPlayer(_player.InstanceId);
         StartCoroutine(OutlineCharacter(0.02f));
     }
 
@@ -85,7 +85,7 @@ public class MoveController : MonoBehaviour
                 _animator.runtimeAnimatorController = _currentController;
             }
         }
-        ((GameManager)_gm).DeselectPlayer(_player.InstanceId);
+        _gm.DeselectPlayer(_player.InstanceId);
         StartCoroutine(OutlineCharacter(0));
     }
 
@@ -127,7 +127,7 @@ public class MoveController : MonoBehaviour
         _currentController = new AnimatorOverrideController();
         _currentController = (AnimatorOverrideController)_animator.runtimeAnimatorController;
 
-        _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        _gm = GameManager.getGM();
 
         _characterController = transform.GetComponent<CharacterController>();
         _wanderScript = transform.GetComponent<WanderScript>();
