@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using PolyPerfect;
 
 public class VirtualAvatarPlayer : NetworkBehaviour
 {
@@ -32,6 +33,11 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             {
                 var parent = GameObject.Find("People/AIs");
                 this.transform.SetParent(parent.transform, false);
+            }
+            var _wanderScript = this.gameObject.GetComponent<WanderScript>();
+            if (_wanderScript)
+            {
+                _wanderScript.enabled = false;
             }
             Debug.Log(this.gameObject.name);
             var spawnedInstance = AvatarManager.SpawnFromAvatar(this.gameObject, avatar);
