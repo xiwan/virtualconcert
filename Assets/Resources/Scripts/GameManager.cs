@@ -225,7 +225,7 @@ public class GameManager : MonoBehaviour
 
         if (NetworkManager.singleton != null)
         {
-            if (NetworkManager.singleton.isNetworkActive && NetworkAttach != null)
+            if (NetworkManager.singleton.isNetworkActive)
             {
                 //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
                 var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript)
@@ -257,14 +257,14 @@ public class GameManager : MonoBehaviour
                 }
                 
 
-                VirtualResponse msg = new VirtualResponse
-                {
-                    messageId = 0x0002,
-                    message = new VirtualAvatarCreateMessage
-                    {
-                        avatars = _avatarList.ToArray()
-                    }
-                };
+                //VirtualResponse msg = new VirtualResponse
+                //{
+                //    messageId = 0x0002,
+                //    message = new VirtualAvatarCreateMessage
+                //    {
+                //        avatars = _avatarList.ToArray()
+                //    }
+                //};
                 //NetworkServer.SendToAll(msg);               
             } 
         }

@@ -10,6 +10,15 @@ public class VirtualNetworkManager : NetworkManager
     private GameManager _gm;
     public GameObject MainRig;
 
+    public void CommandOnServer()
+    {
+        var playerAvatar = NetworkClient.connection.identity.gameObject.GetComponent<VirtualAvatarPlayer>();
+        if (playerAvatar != null)
+        {
+            playerAvatar.SpawnAIs();
+        }
+    }
+
     public override void Awake()
     {
         base.Awake();

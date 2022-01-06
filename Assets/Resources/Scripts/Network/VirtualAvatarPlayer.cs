@@ -11,10 +11,12 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     [SyncVar]
     public Avatar avatar;
 
+    GameManager _gm;
+
 
     private void Awake()
     {
-        
+        //_gm = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     private void Start()
@@ -36,9 +38,21 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             Debug.Log(this.gameObject.name);
         }
     }
+
     public override void OnStartClient()
     {
-        
-        
+
+
     }
+
+    [Command]
+    public void SpawnAIs()
+    {
+        if (_gm == null)
+            _gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        _gm.SpawnAnimals();
+    }
+
+
 }
+

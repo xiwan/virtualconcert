@@ -8,13 +8,13 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
 public class UIEventController : MonoBehaviour
 {
-	private MonoBehaviour _gm;
+	private VirtualNetworkManager _vm;
 
 	// Use this for initialization
 	void Start()
 	{
-		_gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-
+		//_gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+		_vm = GameObject.Find("VirtualNetworkManager").GetComponent<VirtualNetworkManager>();
 
 		Button btn = this.GetComponent<Button>();
 		EventTrigger trigger = btn.gameObject.GetComponent<EventTrigger>();
@@ -38,7 +38,9 @@ public class UIEventController : MonoBehaviour
 	private void OnClick(BaseEventData pointData)
 	{
 		Debug.Log("Button Clicked. EventTrigger..");
-		((GameManager)_gm).SpawnAnimals();
+		// ((GameManager)_gm).SpawnAnimals();
+		_vm.CommandOnServer();
+
 	}
 
 	private void OnMouseEnter(BaseEventData pointData)
