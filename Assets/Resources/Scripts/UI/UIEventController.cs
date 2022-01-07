@@ -13,7 +13,6 @@ public class UIEventController : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		//_gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 		_vm = GameObject.Find("VirtualNetworkManager").GetComponent<VirtualNetworkManager>();
 
 		Button btn = this.GetComponent<Button>();
@@ -40,7 +39,6 @@ public class UIEventController : MonoBehaviour
 		Debug.Log("Button Clicked. EventTrigger..");
 		// ((GameManager)_gm).SpawnAnimals();
 		_vm.CommandOnServer();
-
 	}
 
 	private void OnMouseEnter(BaseEventData pointData)

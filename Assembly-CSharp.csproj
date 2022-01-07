@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="Assets\Imported\DizzyDialogue\Script\DizzyCondition.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\AIScripts\AIState.cs" />
-    <Compile Include="Assets\UIEventController.cs" />
+    <Compile Include="Assets\Resources\Scripts\UI\UIEventController.cs" />
     <Compile Include="Assets\Resources\Scripts\IdolController.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\PlaySound.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\AIScripts\MovementState.cs" />

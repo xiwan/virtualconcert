@@ -95,7 +95,7 @@ public class MoveController : MonoBehaviour
 
         if (_player == null)
         {
-            _player = new Player();
+            _player = gameObject.AddComponent<Player>();
             _player.instanceId = GetInstanceID();
             _player.moveController = this;
             _player.takeOver = false;
@@ -132,7 +132,6 @@ public class MoveController : MonoBehaviour
         _characterController = transform.GetComponent<CharacterController>();
         _wanderScript = transform.GetComponent<WanderScript>();
         _navMeshAgent = transform.GetComponent<NavMeshAgent>();
-        _groundCheck = transform.Find("GroundCheck");
     }
 
     // Update is called once per frame
@@ -217,6 +216,8 @@ public class MoveController : MonoBehaviour
 
     private bool isGround(Transform obj)
     {
+        if (obj == null)
+            obj = transform.Find("GroundCheck");
         _isGrounded = Physics.CheckSphere(obj.position, groundCheckRadius, layerMask);
         return _isGrounded;
     }
