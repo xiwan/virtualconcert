@@ -1,59 +1,48 @@
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using Random = System.Random;
 
-public class PlayerPool 
+public class PlayerPoolManager : Single<PlayerPoolManager>
 {
-    private static PlayerPool _instance;
-
-    private Random random;
 
     private Dictionary<int, Player> _playerPool = new Dictionary<int, Player>();
 
-    public static PlayerPool GetInstance()
-    {
-        if (_instance == null)
-        {
-            _instance = new PlayerPool();
-            _instance.random = new System.Random(1000); 
-        }
-            
-        return _instance;
-    }
-
     public void UpsertData(int id, Player obj)
     {
-        GetInstance()._playerPool[id] = obj;
+        this._playerPool[id] = obj;
     }
 
     public void ResetDataExcept(int id)
     {
-        foreach(KeyValuePair<int, Player> keyVal in _playerPool)
-        {            
+        foreach (KeyValuePair<int, Player> keyVal in _playerPool)
+        {
             if (keyVal.Key != id)
             {
-                _playerPool[keyVal.Key].MoveController.takeOver = false;
-                //_playerPool[keyVal.Key].TakeOver = false;
+                ResetData(keyVal.Key);
             }
         }
     }
 
     public void ResetData(int id)
     {
-        _playerPool[id].MoveController.takeOver = false;
+        _playerPool[id].moveController.takeOver = false;
+        _playerPool[id].takeOver = false;
     }
 
     public int GetSelectedId()
     {
-        foreach(KeyValuePair<int, Player> keyVal in _playerPool)
+        foreach (KeyValuePair<int, Player> keyVal in _playerPool)
         {
             if (_playerPool[keyVal.Key] != null)
             {
-                if (_playerPool[keyVal.Key].TakeOver)
+                if (_playerPool[keyVal.Key].takeOver)
                 {
-                     return keyVal.Key;
-                }   
+                    return keyVal.Key;
+                }
             }
         }
         return 0;
@@ -66,11 +55,10 @@ public class PlayerPool
 
     public Player GetAnyPlayer()
     {
-        
         if (_playerPool.Count > 0)
         {
             int[] keys = _playerPool.Keys.ToArray();
-            int pos = random.Next(0, keys.Length);
+            int pos = MathHelper.GetRandom(0, keys.Length);
             //Debug.Log("return pos: " + pos);
             return _playerPool[keys[pos]];
         }
@@ -81,5 +69,4 @@ public class PlayerPool
     {
         return _playerPool.Count;
     }
-
 }

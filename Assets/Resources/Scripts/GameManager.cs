@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
         // initialization goes here
         DataManager.Initialize();
         AvatarManager.Initialize();
+        PlayerPoolManager.Initialize();
     }
 
     private void LoadData()
@@ -65,17 +66,18 @@ public class GameManager : MonoBehaviour
         selectedPlayer = playerId;
         if (lastSelectedPlayer != selectedPlayer)
         {
-            PlayerPool.GetInstance().ResetDataExcept(selectedPlayer);
+            PlayerPoolManager.Instance.ResetDataExcept(selectedPlayer);
         }
     }
 
     public Player PickAnyPlayer()
     {
-        var player = PlayerPool.GetInstance().GetAnyPlayer();
+        var player = PlayerPoolManager.Instance.GetAnyPlayer();
         if (player != null)
         {
-            player.MoveController.takeOver = true;
-            SelectPlayer(player.InstanceId);
+            player.moveController.takeOver = true;
+            player.takeOver = true;
+            SelectPlayer(player.instanceId);
         }
         return player;
     }
@@ -86,7 +88,7 @@ public class GameManager : MonoBehaviour
         {
             selectedPlayer = playerId;
             lastSelectedPlayer = selectedPlayer;
-            PlayerPool.GetInstance().ResetDataExcept(playerId);
+            PlayerPoolManager.Instance.ResetDataExcept(playerId);
         }
     }
 
@@ -127,7 +129,7 @@ public class GameManager : MonoBehaviour
             resetCamera = false;
             if (selectedPlayer == 0)
             {
-                selectedPlayer = PickAnyPlayer().InstanceId;
+                selectedPlayer = PickAnyPlayer().instanceId;
             }
         }
 
@@ -138,11 +140,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            var player = PlayerPool.GetInstance().GetPlayer(selectedPlayer);
+            var player = PlayerPoolManager.Instance.GetPlayer(selectedPlayer);
             if (player != null)
             {
-                var follower = player.Follower;
-                var target = player.MoveController;
+                var follower = player.follower;
+                var target = player.moveController;
                 ((CameraChange)_cameraChangeScript).CameraFollow(follower.transform, target.transform, new Vector3(0, 1.8f, 0));
                 ((CameraChange)_cameraChangeScript).CameraSwitch(true);
             }
@@ -155,7 +157,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1);
-            _ccuTex.text = "CCU: " + PlayerPool.GetInstance().CountPlayer();
+            _ccuTex.text = "CCU: " + PlayerPoolManager.Instance.CountPlayer();
         }
     }
 

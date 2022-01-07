@@ -59,7 +59,6 @@
     <Compile Include="Assets\Resources\Scripts\IdolController.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\PlaySound.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\AIScripts\MovementState.cs" />
-    <Compile Include="Assets\Resources\Scripts\PlayerPool.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\AIScripts\AudioManager.cs" />
     <Compile Include="Assets\Resources\Scripts\MoveController.cs" />
     <Compile Include="Assets\Resources\Scripts\Manager\EventManager.cs" />
@@ -74,7 +73,7 @@
     <Compile Include="Assets\Imported\polyperfect\- Scripts\AnimationControl.cs" />
     <Compile Include="Assets\Resources\Scripts\Manager\AvatarManager.cs" />
     <Compile Include="Assets\Imported\DizzyDialogue\Sample Scenes\Assets\Script\SineMovement.cs" />
-    <Compile Include="Assets\Resources\Scripts\Player.cs" />
+    <Compile Include="Assets\Resources\Scripts\Model\Player.cs" />
     <Compile Include="Assets\Resources\Scripts\Manager\MessageManager.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\AIScripts\IdleState.cs" />
     <Compile Include="Assets\Resources\Scripts\Network\VirutalSpawnNetworkManager.cs" />
@@ -93,7 +92,7 @@
     <Compile Include="Assets\Imported\polyperfect\- Scripts\AIScripts\AIStats.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\RandomInt.cs" />
     <Compile Include="Assets\Resources\Scripts\Network\VirtualAvatarPlayer.cs" />
-    <Compile Include="Assets\Resources\Scripts\Avatar.cs" />
+    <Compile Include="Assets\Resources\Scripts\Model\Avatar.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\IK\PolyIk.cs" />
     <Compile Include="Assets\Imported\DizzyDialogue\Script\DizzyDialogue.cs" />
     <Compile Include="Assets\Imported\DizzyDialogue\Sample Scenes\Assets\Script\JumpWhenTalking.cs" />
@@ -101,6 +100,9 @@
     <Compile Include="Assets\Resources\Scripts\GameManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Core\Single.cs" />
     <Compile Include="Assets\Resources\Scripts\Manager\DataManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Manager\PlayerPoolManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Helper\TimeHelper.cs" />
+    <Compile Include="Assets\Resources\Scripts\Helper\MathHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Imported\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />

@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    int instanceId;
-    bool takeOver;
-    GameObject follower;
+    public int instanceId;
+    public bool takeOver;
+    public GameObject follower;
+    public MoveController moveController;
 
-    MoveController moveController;
-
+    /*
     public int InstanceId
     {
         get {return instanceId;}
@@ -41,5 +41,5 @@ public class Player : NetworkBehaviour
             takeOver = value;
         }
     }
-
+    */
 }

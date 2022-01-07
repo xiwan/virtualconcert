@@ -60,7 +60,7 @@ public class MoveController : MonoBehaviour
             }   
         }
 
-        _gm.SelectPlayer(_player.InstanceId);
+        _gm.SelectPlayer(_player.instanceId);
         StartCoroutine(OutlineCharacter(0.02f));
     }
 
@@ -85,7 +85,7 @@ public class MoveController : MonoBehaviour
                 _animator.runtimeAnimatorController = _currentController;
             }
         }
-        _gm.DeselectPlayer(_player.InstanceId);
+        _gm.DeselectPlayer(_player.instanceId);
         StartCoroutine(OutlineCharacter(0));
     }
 
@@ -96,13 +96,13 @@ public class MoveController : MonoBehaviour
         if (_player == null)
         {
             _player = new Player();
-            _player.InstanceId = GetInstanceID();
-            _player.MoveController = this;
-            _player.TakeOver = false;
-            _player.Follower = GameObject.Find("Follower");
- 
+            _player.instanceId = GetInstanceID();
+            _player.moveController = this;
+            _player.takeOver = false;
+            _player.follower = GameObject.Find("Follower");
+
             // register player
-            PlayerPool.GetInstance().UpsertData(_player.InstanceId, _player);
+            PlayerPoolManager.Instance.UpsertData(_player.instanceId, _player);
         }
 
         if (_eventManager == null)
