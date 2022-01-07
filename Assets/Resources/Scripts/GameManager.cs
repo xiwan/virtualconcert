@@ -60,6 +60,11 @@ public class GameManager : MonoBehaviour
         return GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
+    public static VirtualNetworkManager GetVNM()
+    { 
+        return GameObject.Find("VirtualNetworkManager").GetComponent<VirtualNetworkManager>();
+    }
+
     public void SelectPlayer(int playerId)
     {
         lastSelectedPlayer = selectedPlayer;

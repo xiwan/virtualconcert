@@ -10,7 +10,7 @@ public class VirtualNetworkManager : NetworkManager
     private GameManager _gm;
     public GameObject MainRig;
 
-    public void CommandOnServer()
+    public void CommandOnServer(int clickId)
     {
         var playerAvatar = NetworkClient.connection.identity.gameObject.GetComponent<VirtualAvatarPlayer>();
         if (playerAvatar != null)
