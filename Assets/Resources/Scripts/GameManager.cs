@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public bool pickAnyPlayer = false;
 
     public float spawnRadius = 20;
+
     public int spawnAmount = 20;
 
     public Transform NetworkAttach;
@@ -31,82 +32,21 @@ public class GameManager : MonoBehaviour
 
     public GameObject MainRig;
 
-    private List<Avatar> npcPrefabsList = new List<Avatar>();
+    private AvatarManager _avatarManager;
 
-    private void LoadPrefabs()
+    private void Initialize()
     {
-        var man01 = new Avatar() {
-            id = 1,
-            aname = "man-astronaut",
-            animatorController = "MoonwalkController"
-        };
-        var man02 = new Avatar()
-        {
-            id = 2,
-            aname = "man-basketball-player",
-            animatorController = "BellyController"
-        };
-        var man03 = new Avatar()
-        {
-            id = 3,
-            aname = "man-boxer",
-            animatorController = "BrooklynuprockController"
-        };
-        var man04 = new Avatar()
-        {
-            id = 4,
-            aname = "man-business",
-            animatorController = "FlairController"
-        };
-        var man05 = new Avatar()
-        {
-            id = 5,
-            aname = "man-casual",
-            animatorController = "HouseController"
-        };
-        var man06 = new Avatar()
-        {
-            id = 6,
-            aname = "man-chef",
-            animatorController = "JazzController"
-        };
-        var man07 = new Avatar()
-        {
-            id = 7,
-            aname = "man-clown",
-            animatorController = "MoonwalkController"
-        };
-        var man08 = new Avatar()
-        {
-            id = 8,
-            aname = "man-construction-worker",
-            animatorController = "NorthsoulController"
-        };
-        var man09 = new Avatar()
-        {
-            id = 9,
-            aname = "man-cowboy",
-            animatorController = "SambaController"
-        };
-        var man10 = new Avatar()
-        {
-            id = 10,
-            aname = "man-cyclist",
-            animatorController = "YmcaController"
-        };
-        npcPrefabsList.Add(man01);
-        npcPrefabsList.Add(man02);
-        npcPrefabsList.Add(man03);
-        npcPrefabsList.Add(man04);
-        npcPrefabsList.Add(man05);
-        npcPrefabsList.Add(man06);
-        npcPrefabsList.Add(man07);
-        npcPrefabsList.Add(man08);
-        npcPrefabsList.Add(man09);
-        npcPrefabsList.Add(man10);
+        // initialization goes here
+        DataManager.Initialize();
+        AvatarManager.Initialize();
     }
 
-    public Avatar[] Avatars { get; set; }
+    private void LoadData()
+    {
+        // data load goes here
+        DataManager.Instance.LoadPrefabsData();
+
+    }
 
     [ContextMenu("Spawn Animals")]
     public void SpawnAnimals()
@@ -114,7 +54,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(NetworkManagerSpawnAnimals());        
     }
 
-    public static GameManager getGM()
+    public static GameManager GetGM()
     { 
         return GameObject.Find("GameManager").GetComponent<GameManager>();
     }
@@ -152,7 +92,8 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        LoadPrefabs();
+        Initialize();
+        LoadData();
     }
 
     // Start is called before the first frame update
@@ -228,8 +169,8 @@ public class GameManager : MonoBehaviour
             if (NetworkManager.singleton.isNetworkActive)
             {
                 //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
-                var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript)
-                    .SpawnAnimals(MainRig, npcPrefabsList.ToArray(), parent, spawnAmount, spawnRadius);
+                var characters = DataManager.Instance.NpcPrefabsList.ToArray();
+                var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(MainRig, characters, parent, spawnAmount, spawnRadius);
 
                 var _avatarList = new List<Avatar>();
                 for (int i = 0; i < _instances.Length; i++)

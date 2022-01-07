@@ -22,7 +22,7 @@ public class VirtualNetworkManager : NetworkManager
     public override void Awake()
     {
         base.Awake();
-        _gm = GameManager.getGM(); 
+        _gm = GameManager.GetGM(); 
 
     }
 
@@ -94,13 +94,7 @@ public class VirtualNetworkManager : NetworkManager
 
     void OnServerReceiveMsg(NetworkConnection conn, VirtualRequest msg)
     {
-        var parent = GameObject.Find("People/Players");
-
-        GameObject _playerObject = Instantiate(MainRig, Vector3.zero, Quaternion.identity, parent.transform);
-        var spawnedInstance = AvatarManager.SpawnFromAvatar(_playerObject, msg.message);
-        // enable player avatar sync avatar data
-        var playerAvatar = spawnedInstance.GetComponent<VirtualAvatarPlayer>();
-        playerAvatar.avatar = msg.message;
+        var spawnedInstance = AvatarManager.Instance.SpawnPlayerFromAvatar(MainRig, msg.message);
 
         // call this to use this gameobject as the primary controller
         Debug.Log("called from server");

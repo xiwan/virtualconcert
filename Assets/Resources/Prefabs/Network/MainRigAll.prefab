@@ -3399,6 +3399,7 @@ GameObject:
   - component: {fileID: 737970206704531049}
   - component: {fileID: 5924696495801137443}
   - component: {fileID: 6929786378797295956}
+  - component: {fileID: -9078295983211462556}
   m_Layer: 0
   m_Name: MainRigAll
   m_TagString: Untagged
@@ -3647,6 +3648,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+--- !u!114 &-9078295983211462556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5686130684498795251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2e27898e18e45e9b1c0ecf5a1327db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundCheckRadius: 0.2
+  gravity: -9.8
+  speed: 5
+  rotateSpeed: 1
+  jumpHeight: 3
+  takeOver: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &5686130990774877607
 GameObject:
   m_ObjectHideFlags: 0

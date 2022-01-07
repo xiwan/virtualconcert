@@ -91,7 +91,9 @@ public class MoveController : MonoBehaviour
 
     private void Awake()
     {
-        if(_player == null)
+        _gm = GameManager.GetGM();
+
+        if (_player == null)
         {
             _player = new Player();
             _player.InstanceId = GetInstanceID();
@@ -126,8 +128,6 @@ public class MoveController : MonoBehaviour
         _overrideController = Resources.Load<AnimatorOverrideController>(_swapAnimatorPath);
         _currentController = new AnimatorOverrideController();
         _currentController = (AnimatorOverrideController)_animator.runtimeAnimatorController;
-
-        _gm = GameManager.getGM();
 
         _characterController = transform.GetComponent<CharacterController>();
         _wanderScript = transform.GetComponent<WanderScript>();

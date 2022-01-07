@@ -63,7 +63,7 @@ namespace PolyPerfect
                 var avatar = characters[value];
                 var instance = Instantiate(mainRig, RandomNavmeshLocation(spawnSize), Quaternion.identity, parent.transform);
 
-                var spawnedInstance = AvatarManager.SpawnFromAvatar(instance, avatar);
+                var spawnedInstance = AvatarManager.Instance.SpawnFromAvatar(instance, avatar);
                 if (spawnedInstance != null)
                 {
                     instances[i] = instance;

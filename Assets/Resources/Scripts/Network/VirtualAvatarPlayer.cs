@@ -39,8 +39,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             {
                 _wanderScript.enabled = false;
             }
-            Debug.Log(this.gameObject.name);
-            var spawnedInstance = AvatarManager.SpawnFromAvatar(this.gameObject, avatar);
+            var spawnedInstance = AvatarManager.Instance.SpawnFromAvatar(this.gameObject, avatar);
             Debug.Log(this.gameObject.name);
         }
     }
