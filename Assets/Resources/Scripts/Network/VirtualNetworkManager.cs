@@ -14,7 +14,7 @@ public class VirtualNetworkManager : NetworkManager
         var playerAvatar = NetworkClient.connection.identity.gameObject.GetComponent<VirtualAvatarPlayer>();
         if (playerAvatar != null)
         {
-            playerAvatar.SpawnAIs();
+            playerAvatar.SpawnAIsOnServer();
         }
     }
 
@@ -53,7 +53,7 @@ public class VirtualNetworkManager : NetworkManager
             message = new Avatar
             {
                 id = 101,
-                type = 0, // player
+                type = CHARACTER.Player, // player
                 aname = "woman-police",
                 animatorController = "YmcaController"
             }
@@ -69,7 +69,7 @@ public class VirtualNetworkManager : NetworkManager
 
         NetworkClient.RegisterHandler<VirtualResponse>(OnClientReceiveMsg);
         // generate a new unique assetId 
-        System.Guid creatureAssetId = System.Guid.NewGuid();
+        //System.Guid creatureAssetId = System.Guid.NewGuid();
 
         //NetworkClient.RegisterSpawnHandler(creatureAssetId, SpawnDelegate, UnSpawnDelegate);
         NetworkClient.RegisterPrefab(MainRig);
@@ -92,23 +92,27 @@ public class VirtualNetworkManager : NetworkManager
 
     void OnServerReceiveMsg(NetworkConnection conn, VirtualRequest msg)
     {
-        var spawnedInstance = AvatarManager.Instance.SpawnPlayerFromAvatar(MainRig, msg.message);
-
-        // call this to use this gameobject as the primary controller
         Debug.Log("called from server");
-        NetworkServer.AddPlayerForConnection(conn, spawnedInstance);
-        //NetworkServer.Spawn(spawnedInstance);
+        if (msg.messageId == 0x0001)
+        {
+            var parent = GameObject.Find("People/Players");
+            var spawnedInstance = AvatarManager.Instance.SpawnPlayerFromAvatar(MainRig, msg.message, parent.transform);
+
+            // call this to use this gameobject as the primary controller
+
+            NetworkServer.AddPlayerForConnection(conn, spawnedInstance);
+            //NetworkServer.Spawn(spawnedInstance);
+        }
+
+
     }
 
     void OnClientReceiveMsg(VirtualResponse msg)
     {
         Debug.Log("called from client");
-        var parent = GameObject.Find("People/AIs");
-        foreach (Avatar ava in msg.message.avatars)
+        if (msg.messageId == 0x0001)
         {
-            //Debug.Log(ava.animatorController);
-            //var instance = Instantiate(playerPrefab, ava.postion, ava.rotation, parent.transform);
-            //var spawnedInstance = AvatarManager.SpawnFromAvatar(instance, ava);
+            GameManager.GetGM().UpdateUI(msg.num);
         }
     }
 }

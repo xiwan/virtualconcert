@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     public int spawnAmount = 20;
 
-    public Transform NetworkAttach;
+    public NetworkManager MirrorManager;
 
     public Dictionary<int, int> selectedPlayerDict = new Dictionary<int, int>();
 
@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
 
     private void LoadData()
     {
+        if (MirrorManager == null)
+            MirrorManager = GetVNM();
         // data load goes here
         DataManager.Instance.LoadPrefabsData();
 
@@ -58,7 +60,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(NetworkManagerSpawnAnimals());        
     }
 
-    public bool IsMiiror()
+    public bool IsMirror()
     {
         return NetworkManager.singleton != null && NetworkManager.singleton.isNetworkActive;
     }
@@ -118,7 +120,7 @@ public class GameManager : MonoBehaviour
         _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
         _ccuTex = GameObject.Find("Counter").GetComponent<Text>();
 
-        StartCoroutine(UpdateUITask());
+        //StartCoroutine(UpdateUITask());
     }
 
     // Update is called once per frame
@@ -165,50 +167,63 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator UpdateUITask()
+    public void  UpdateUI(int currentPlayerNum)
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(1);
-            _ccuTex.text = "CCU: " + PlayerPoolManager.Instance.CountPlayer();
-        }
+        var _ccuTex = GameObject.Find("Counter").GetComponent<Text>();
+        _ccuTex.text = "CCU: " + currentPlayerNum;
     }
 
     IEnumerator NetworkManagerSpawnAnimals()
     {
         yield return new WaitForSeconds((Random.Range(0, 200) / 100));
-        var parent = GameObject.Find("People/AIs");
-        var characters = DataManager.Instance.NpcPrefabsList.ToArray();
-        var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(MainRig, characters, parent, spawnAmount, spawnRadius);
 
-        if (this.IsMiiror())
+        try 
         {
-            //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
-            
+            var parent = GameObject.Find("People/AIs");
+            var characters = DataManager.Instance.NpcPrefabsList.ToArray();
+            var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(MainRig, characters, parent, spawnAmount, spawnRadius);
 
-            for (int i = 0; i < _instances.Length; i++)
+            if (this.IsMirror())
             {
-                var _fullname = _instances[i].name;
-                var _avatarname = _fullname.Split('_')[0];
-                var _avatarid = _fullname.Split('_')[1];
-                var _avatar = new Avatar()
+                //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
+
+
+                for (int i = 0; i < _instances.Length; i++)
                 {
-                    id = ToolsManager.ParseInt32(_avatarid),
-                    type = 1, // ai
-                    aname = _avatarname,
-                    animatorController = _instances[i].GetComponent<Animator>().runtimeAnimatorController.name,
-                    postion = _instances[i].transform.position,
-                    rotation = _instances[i].transform.rotation,
-                    scale = _instances[i].transform.localScale
+                    var _fullname = _instances[i].name;
+                    var _avatarname = _fullname.Split('_')[0];
+                    var _avatarid = _fullname.Split('_')[1];
+                    var _avatar = new Avatar()
+                    {
+                        id = ToolsManager.ParseInt32(_avatarid),
+                        type = CHARACTER.AI, // ai
+                        aname = _avatarname,
+                        animatorController = _instances[i].GetComponent<Animator>().runtimeAnimatorController.name,
+                        postion = _instances[i].transform.position,
+                        rotation = _instances[i].transform.rotation,
+                        scale = _instances[i].transform.localScale
+                    };
+
+                    var aiAvatar = _instances[i].GetComponent<VirtualAvatarPlayer>();
+                    aiAvatar.avatar = _avatar;
+
+                    // server spawn the instance
+                    NetworkServer.Spawn(_instances[i]);
+                }
+
+                var rsp = new VirtualResponse
+                {
+                    messageId = 0x0001,
+                    num = PlayerPoolManager.Instance.CountPlayer(),
                 };
 
-                var aiAvatar = _instances[i].GetComponent<VirtualAvatarPlayer>();
-                aiAvatar.avatar = _avatar;
-
-                // server spawn the instance
-                NetworkServer.Spawn(_instances[i]);
+                NetworkServer.SendToReady(rsp);
             }
         }
+        finally
+        {
+            UpdateUI(PlayerPoolManager.Instance.CountPlayer());
+        }  
         
     }
 

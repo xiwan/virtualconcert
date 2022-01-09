@@ -53,7 +53,7 @@ public class MoveController : MonoBehaviour
         {
             if (_overrideController != null && _overrideController != _animator.runtimeAnimatorController)
             {
-                Debug.Log(_overrideController);
+                Debug.Log(_overrideController.runtimeAnimatorController);
                 _animator.runtimeAnimatorController = _overrideController;
             }   
         }
@@ -79,7 +79,7 @@ public class MoveController : MonoBehaviour
         {
             if (_currentController != null && _currentController != _animator.runtimeAnimatorController)
             {
-                Debug.Log(_currentController);
+                Debug.Log(_currentController.runtimeAnimatorController);
                 _animator.runtimeAnimatorController = _currentController;
             }
         }
@@ -99,7 +99,7 @@ public class MoveController : MonoBehaviour
             _player.follower = GameObject.Find("Follower");
 
             // register player
-            PlayerPoolManager.Instance.UpsertData(_player.instanceId, _player);
+            //PlayerPoolManager.Instance.UpsertData(_player.instanceId, _player);
         }
 
     }

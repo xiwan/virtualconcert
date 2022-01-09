@@ -20,7 +20,7 @@ public class EventManager : Single<EventManager>
     {
         this.AddHandler(EVENT.UISpawnAIs, () =>
         {
-            if (GameManager.GetGM().IsMiiror())
+            if (GameManager.GetGM().IsMirror())
             {
                 GameManager.GetVNM().CommandOnServer(EVENT.UISpawnAIs);
             }

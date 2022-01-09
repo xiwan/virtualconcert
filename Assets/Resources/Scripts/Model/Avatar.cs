@@ -10,7 +10,7 @@ using UnityEngine;
 public class Avatar 
 {
     public int id;
-    public int type;
+    public CHARACTER type;
     public string aname;
     public string animatorController;
     public Vector3 postion;

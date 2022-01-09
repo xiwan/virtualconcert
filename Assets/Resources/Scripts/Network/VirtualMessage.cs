@@ -17,8 +17,8 @@ public struct VirtualResponse : NetworkMessage
 {
     public int messageId;
     public string content;
+    public int num;
     public byte[] payload;
-    public VirtualAvatarCreateMessage message;
 }
 
 public struct VirtualAvatarCreateMessage 

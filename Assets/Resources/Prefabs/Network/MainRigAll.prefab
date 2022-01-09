@@ -3508,16 +3508,8 @@ MonoBehaviour:
     maxStateTime: 4
     moveSpeed: 3
     turnSpeed: 200
-  attackingStates:
-  - stateName: Kicking
-    animationBool: isKicking
-  - stateName: PunchingLeft
-    animationBool: isPunching_Left
-  - stateName: PunchingRight
-    animationBool: isPunching_Right
-  deathStates:
-  - stateName: Dead
-    animationBool: isDead
+  attackingStates: []
+  deathStates: []
   species: Human
   stats: {fileID: 11400000, guid: 5f52eda6bb8a93a4b893f847eee5dcc5, type: 2}
   wanderZone: 10
@@ -3605,7 +3597,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5686130684498795251}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
   m_Name: 
@@ -3639,13 +3631,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5686130684498795251}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 1
   clientAuthority: 0
   animator: {fileID: 5745930709866292403}
 --- !u!114 &6929786378797295956
@@ -3661,7 +3653,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.5
+  takeOver: 0
 --- !u!114 &-9078295983211462556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3669,7 +3662,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5686130684498795251}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba2e27898e18e45e9b1c0ecf5a1327db, type: 3}
   m_Name: 
