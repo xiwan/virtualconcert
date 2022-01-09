@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 // 需要 EventTrigger 脚本的支援
 [RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
 public class UIEventController : MonoBehaviour
@@ -12,7 +13,6 @@ public class UIEventController : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-
 		Button btn = this.GetComponent<Button>();
 		EventTrigger trigger = btn.gameObject.GetComponent<EventTrigger>();
 		RegisterOnClickEvt(trigger);
@@ -36,7 +36,9 @@ public class UIEventController : MonoBehaviour
 	{
 		Debug.Log("Button Clicked. EventTrigger..");
 		// ((GameManager)_gm).SpawnAnimals();
-		GameManager.GetVNM().CommandOnServer(clickId);
+		//GameManager.GetVNM().CommandOnServer((EVENT)clickId);
+		EventManager.Instance.Trigger(EVENT.UISpawnAIs);
+
 	}
 
 	private void OnMouseEnter(BaseEventData pointData)

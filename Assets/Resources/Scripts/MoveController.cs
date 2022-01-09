@@ -10,7 +10,6 @@ public class MoveController : MonoBehaviour
 {
     private CharacterController _characterController;
     private MonoBehaviour _wanderScript;
-    private GameManager _gm;
     private NavMeshAgent _navMeshAgent;
     private Animator _animator;
     //private GameObject _follower;
@@ -59,7 +58,7 @@ public class MoveController : MonoBehaviour
             }   
         }
 
-        _gm.SelectPlayer(_player.instanceId);
+        GameManager.GetGM().SelectPlayer(_player.instanceId);
         StartCoroutine(OutlineCharacter(0.02f));
     }
 
@@ -84,13 +83,12 @@ public class MoveController : MonoBehaviour
                 _animator.runtimeAnimatorController = _currentController;
             }
         }
-        _gm.DeselectPlayer(_player.instanceId);
+        GameManager.GetGM().DeselectPlayer(_player.instanceId);
         StartCoroutine(OutlineCharacter(0));
     }
 
     private void Awake()
     {
-        _gm = GameManager.GetGM();
 
         if (_player == null)
         {
@@ -104,14 +102,6 @@ public class MoveController : MonoBehaviour
             PlayerPoolManager.Instance.UpsertData(_player.instanceId, _player);
         }
 
-        EventManager.Instance.AddHandler(EVENT.TakeOverEventOn, () =>{
-            TakeOverEventOn();
-            MoveLikeWoW();
-            MoveCustom();
-        });
-        EventManager.Instance.AddHandler(EVENT.TakeOverEventOff, () => {
-            TakeOverEventOff();             
-        }); 
     }
 
     // Start is called before the first frame update
@@ -133,11 +123,13 @@ public class MoveController : MonoBehaviour
     {
         if (takeOver)
         {
-            EventManager.Instance?.Trigger(EVENT.TakeOverEventOn);
+            TakeOverEventOn();
+            MoveLikeWoW();
+            MoveCustom();
         }
         else
         {
-            EventManager.Instance?.Trigger(EVENT.TakeOverEventOff);
+            TakeOverEventOff();
         }
     }
 

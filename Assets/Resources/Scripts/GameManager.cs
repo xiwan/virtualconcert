@@ -48,12 +48,19 @@ public class GameManager : MonoBehaviour
         // data load goes here
         DataManager.Instance.LoadPrefabsData();
 
+        EventManager.Instance.LoadEvent();
+
     }
 
     [ContextMenu("Spawn Animals")]
     public void SpawnAnimals()
     {
         StartCoroutine(NetworkManagerSpawnAnimals());        
+    }
+
+    public bool IsMiiror()
+    {
+        return NetworkManager.singleton != null && NetworkManager.singleton.isNetworkActive;
     }
 
     public static GameManager GetGM()
@@ -171,56 +178,38 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds((Random.Range(0, 200) / 100));
         var parent = GameObject.Find("People/AIs");
+        var characters = DataManager.Instance.NpcPrefabsList.ToArray();
+        var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(MainRig, characters, parent, spawnAmount, spawnRadius);
 
-        if (NetworkManager.singleton != null)
+        if (this.IsMiiror())
         {
-            if (NetworkManager.singleton.isNetworkActive)
+            //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
+            
+
+            for (int i = 0; i < _instances.Length; i++)
             {
-                //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
-                var characters = DataManager.Instance.NpcPrefabsList.ToArray();
-                var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(MainRig, characters, parent, spawnAmount, spawnRadius);
-
-                var _avatarList = new List<Avatar>();
-                for (int i = 0; i < _instances.Length; i++)
+                var _fullname = _instances[i].name;
+                var _avatarname = _fullname.Split('_')[0];
+                var _avatarid = _fullname.Split('_')[1];
+                var _avatar = new Avatar()
                 {
-                    var _fullname = _instances[i].name;
-                    var _avatarname = _fullname.Split('_')[0];
-                    var _avatarid = _fullname.Split('_')[1];
-                    var _avatar = new Avatar()
-                    {
-                        id = ToolsManager.ParseInt32(_avatarid),
-                        type = 1, // ai
-                        aname = _avatarname,
-                        animatorController = _instances[i].GetComponent<Animator>().runtimeAnimatorController.name,
-                        postion = _instances[i].transform.position,
-                        rotation = _instances[i].transform.rotation,
-                        scale = _instances[i].transform.localScale
-                    };
+                    id = ToolsManager.ParseInt32(_avatarid),
+                    type = 1, // ai
+                    aname = _avatarname,
+                    animatorController = _instances[i].GetComponent<Animator>().runtimeAnimatorController.name,
+                    postion = _instances[i].transform.position,
+                    rotation = _instances[i].transform.rotation,
+                    scale = _instances[i].transform.localScale
+                };
 
-                    var aiAvatar = _instances[i].GetComponent<VirtualAvatarPlayer>();
-                    aiAvatar.avatar = _avatar;
+                var aiAvatar = _instances[i].GetComponent<VirtualAvatarPlayer>();
+                aiAvatar.avatar = _avatar;
 
-                    // server spawn the instance
-                    NetworkServer.Spawn(_instances[i]);
-                    //_avatarList.Add(_avatar);
-                }
-                
-
-                //VirtualResponse msg = new VirtualResponse
-                //{
-                //    messageId = 0x0002,
-                //    message = new VirtualAvatarCreateMessage
-                //    {
-                //        avatars = _avatarList.ToArray()
-                //    }
-                //};
-                //NetworkServer.SendToAll(msg);               
-            } 
+                // server spawn the instance
+                NetworkServer.Spawn(_instances[i]);
+            }
         }
-        else
-        {
-            ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(parent, spawnAmount, spawnRadius);
-        }
+        
     }
 
 

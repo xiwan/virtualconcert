@@ -7,12 +7,10 @@ using UnityEngine;
 
 public class VirtualNetworkManager : NetworkManager
 {
-    private GameManager _gm;
     public GameObject MainRig;
 
-    public void CommandOnServer(int clickId)
+    public void CommandOnServer(EVENT evt)
     {
-
         var playerAvatar = NetworkClient.connection.identity.gameObject.GetComponent<VirtualAvatarPlayer>();
         if (playerAvatar != null)
         {
@@ -23,7 +21,6 @@ public class VirtualNetworkManager : NetworkManager
     public override void Awake()
     {
         base.Awake();
-        _gm = GameManager.GetGM(); 
 
     }
 
