@@ -12,6 +12,7 @@ public class VirtualNetworkManager : NetworkManager
 
     public void CommandOnServer(int clickId)
     {
+
         var playerAvatar = NetworkClient.connection.identity.gameObject.GetComponent<VirtualAvatarPlayer>();
         if (playerAvatar != null)
         {

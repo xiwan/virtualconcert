@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
         DataManager.Initialize();
         AvatarManager.Initialize();
         PlayerPoolManager.Initialize();
+        EventManager.Initialize();
     }
 
     private void LoadData()

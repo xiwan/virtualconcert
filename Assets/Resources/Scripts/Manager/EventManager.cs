@@ -9,20 +9,10 @@ public enum EVENT
     TakeOverEventOn,
     TakeOverEventOff,
 };
-public class EventManager 
+public class EventManager : Single<EventManager>
 {
     private Dictionary<EVENT, Action> eventTable = new Dictionary<EVENT, Action>();
 
-    private static EventManager _instance;
-
-    public static EventManager GetInstance()
-    {
-        if (_instance == null)
-        {
-            _instance = new EventManager();
-        }
-        return _instance;
-    }
     
     public void AddHandler(EVENT evt, Action action)
     {
@@ -43,12 +33,12 @@ public class EventManager
 
     public void AddGlobalHandler(EVENT evt, Action action)
     {
-        GetInstance().AddHandler(evt, action);
+        this.AddHandler(evt, action);
     }
 
     public void Broadcast (EVENT evt)
     {
-        GetInstance().Trigger(evt);
+        this.Trigger(evt);
     }
 
 }

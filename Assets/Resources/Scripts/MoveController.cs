@@ -36,7 +36,6 @@ public class MoveController : MonoBehaviour
     public float jumpHeight = 3f;
     public bool takeOver = false;
     public LayerMask layerMask;
-    private EventManager _eventManager;
     
     // Take Over Authority On Event
     public void TakeOverEventOn()
@@ -105,19 +104,14 @@ public class MoveController : MonoBehaviour
             PlayerPoolManager.Instance.UpsertData(_player.instanceId, _player);
         }
 
-        if (_eventManager == null)
-        {
-            _eventManager = new EventManager();
-            // register event
-            _eventManager.AddHandler(EVENT.TakeOverEventOn, () =>{
-                TakeOverEventOn();
-                MoveLikeWoW();
-                MoveCustom();
-            });
-            _eventManager.AddHandler(EVENT.TakeOverEventOff, () => {
-                TakeOverEventOff();             
-            }); 
-        }
+        EventManager.Instance.AddHandler(EVENT.TakeOverEventOn, () =>{
+            TakeOverEventOn();
+            MoveLikeWoW();
+            MoveCustom();
+        });
+        EventManager.Instance.AddHandler(EVENT.TakeOverEventOff, () => {
+            TakeOverEventOff();             
+        }); 
     }
 
     // Start is called before the first frame update
@@ -139,11 +133,11 @@ public class MoveController : MonoBehaviour
     {
         if (takeOver)
         {
-            _eventManager?.Trigger(EVENT.TakeOverEventOn);
+            EventManager.Instance?.Trigger(EVENT.TakeOverEventOn);
         }
         else
         {
-            _eventManager?.Trigger(EVENT.TakeOverEventOff);
+            EventManager.Instance?.Trigger(EVENT.TakeOverEventOff);
         }
     }
 
