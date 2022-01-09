@@ -36,8 +36,8 @@ public class UIEventController : MonoBehaviour
 	{
 		Debug.Log("Button Clicked. EventTrigger..");
 		// ((GameManager)_gm).SpawnAnimals();
-		//GameManager.GetVNM().CommandOnServer((EVENT)clickId);
-		EventManager.Instance.Trigger(EVENT.UISpawnAIs);
+		//GameManager.GetVNM().CommandOnServer();
+		EventManager.Instance.Trigger((EVENT)clickId);
 
 	}
 

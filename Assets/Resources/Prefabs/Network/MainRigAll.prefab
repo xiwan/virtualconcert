@@ -3412,7 +3412,6 @@ GameObject:
   - component: {fileID: 737970206704531049}
   - component: {fileID: 5924696495801137443}
   - component: {fileID: 6929786378797295956}
-  - component: {fileID: -9078295983211462556}
   m_Layer: 0
   m_Name: MainRigAll
   m_TagString: Untagged
@@ -3487,26 +3486,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idleStates:
-  - stateName: Waving
-    animationBool: isWaving
-    minStateTime: 1
-    maxStateTime: 4
-    stateWeight: 0
-  - stateName: Texting
-    animationBool: isTexting
-    minStateTime: 10
-    maxStateTime: 30
+  - stateName: Idling
+    animationBool: isIdling
+    minStateTime: 3
+    maxStateTime: 5
+    stateWeight: 20
+  - stateName: Dancing
+    animationBool: isDancing
+    minStateTime: 5
+    maxStateTime: 10
     stateWeight: 1
   movementStates:
   - stateName: Walking
     animationBool: isWalking
-    maxStateTime: 3
-    moveSpeed: 2
-    turnSpeed: 400
+    maxStateTime: 10
+    moveSpeed: 1
+    turnSpeed: 200
   - stateName: Running
     animationBool: isRunning
-    maxStateTime: 4
-    moveSpeed: 3
+    maxStateTime: 10
+    moveSpeed: 4
     turnSpeed: 200
   attackingStates: []
   deathStates: []
@@ -3655,24 +3654,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.5
   takeOver: 0
---- !u!114 &-9078295983211462556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5686130684498795251}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba2e27898e18e45e9b1c0ecf5a1327db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   groundCheckRadius: 0.2
   gravity: -9.8
   speed: 5
   rotateSpeed: 1
   jumpHeight: 3
-  takeOver: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 64

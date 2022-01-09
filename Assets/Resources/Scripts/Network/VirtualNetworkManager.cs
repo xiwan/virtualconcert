@@ -9,13 +9,62 @@ public class VirtualNetworkManager : NetworkManager
 {
     public GameObject MainRig;
 
-    public void CommandOnServer(EVENT evt)
+    CameraChange _cameraChangeScript;
+    private Transform _groundCheck;
+
+
+    // only called on client
+    NetworkBehaviour GetConnPlayer()
     {
         var playerAvatar = NetworkClient.connection.identity.gameObject.GetComponent<VirtualAvatarPlayer>();
-        if (playerAvatar != null)
+        if (playerAvatar == null)
         {
-            playerAvatar.SpawnAIsOnServer();
+            throw new Exception("not found alive conn");
         }
+        return playerAvatar;
+    }
+
+    // only called on client
+    uint GetNetId()
+    {
+        return NetworkClient.connection.identity.netId;
+    }
+
+    public void CommandOnServer(EVENT evt)
+    {
+        if (evt == EVENT.UISpawnAIs)
+        {
+            (GetConnPlayer() as VirtualAvatarPlayer).SpawnAIsOnServer();
+        }
+        else if(evt == EVENT.UIPickAny)
+        {
+            //(GetConnPlayer() as VirtualAvatarPlayer).PickAnyAIOnServer();
+        }
+
+    }
+
+    public void EnterClientMode()
+    {
+        var networkId = GetNetId();
+        var msg = new VirtualRequest
+        {
+            messageId = 0x0002,
+            networkId = Convert.ToInt32(networkId),
+            takeOver = true
+        };
+        NetworkClient.connection.Send(msg);
+    }
+
+    public void EnterServerMode()
+    {
+        var networkId = GetNetId();
+        var msg = new VirtualRequest
+        {
+            messageId = 0x0002,
+            networkId = Convert.ToInt32(networkId),
+            takeOver = false
+        };
+        NetworkClient.connection.Send(msg);
     }
 
     public override void Awake()
@@ -27,6 +76,12 @@ public class VirtualNetworkManager : NetworkManager
     public override void Start()
     {
         base.Start();
+        //_cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
+    }
+
+    private void Update()
+    {
+        //CameraFollow(true);
     }
 
     public override void OnStartServer()
@@ -34,6 +89,13 @@ public class VirtualNetworkManager : NetworkManager
         base.OnStartServer();
 
         NetworkServer.RegisterHandler<VirtualRequest>(OnServerReceiveMsg);
+    }
+
+    public override void OnStopServer()
+    {
+        base.OnStopServer();
+
+        GameManager.GetGM().CleanData();
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn)
@@ -90,9 +152,18 @@ public class VirtualNetworkManager : NetworkManager
         base.OnClientNotReady();
     }
 
+    private void CameraFollow(bool flag)
+    {
+        var follower = GameObject.Find("Follower");
+        var target = GetConnPlayer();
+
+        _cameraChangeScript.CameraFollow(follower.transform, target.transform, new Vector3(0, 1.8f, 0));
+        _cameraChangeScript.CameraSwitch(flag);
+    }
+
     void OnServerReceiveMsg(NetworkConnection conn, VirtualRequest msg)
     {
-        Debug.Log("called from server");
+        Debug.Log("called on server");
         if (msg.messageId == 0x0001)
         {
             var parent = GameObject.Find("People/Players");
@@ -103,16 +174,23 @@ public class VirtualNetworkManager : NetworkManager
             NetworkServer.AddPlayerForConnection(conn, spawnedInstance);
             //NetworkServer.Spawn(spawnedInstance);
         }
-
-
+        else if (msg.messageId == 0x0002)
+        {
+            var player = PlayerPoolManager.Instance.GetPlayer(msg.networkId);
+            player.takeOver = msg.takeOver;
+            player.playerController.takeOver = msg.takeOver;
+            player.playerController._moveData = msg.moveData;;
+        }
     }
 
     void OnClientReceiveMsg(VirtualResponse msg)
     {
-        Debug.Log("called from client");
+        Debug.Log("called on client");
         if (msg.messageId == 0x0001)
         {
             GameManager.GetGM().UpdateUI(msg.num);
         }
     }
+
+
 }

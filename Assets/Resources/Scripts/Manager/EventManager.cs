@@ -6,9 +6,10 @@ using UnityEngine;
 
 public enum EVENT 
 {
-    UISpawnAIs,
-    UIPickAny,
-
+    UISpawnAIs = 0,
+    UIPickAny = 1,
+    UIClientAuth = 2,
+    UIServerAuth = 3,
 };
 
 public class EventManager : Single<EventManager>
@@ -33,6 +34,22 @@ public class EventManager : Single<EventManager>
         this.AddHandler(EVENT.UIPickAny, () =>
         {
 
+        });
+
+        this.AddHandler(EVENT.UIClientAuth, () =>
+        {
+            if (GameManager.GetGM().IsMirror())
+            {
+                GameManager.GetVNM().EnterClientMode();
+            }
+        });
+
+        this.AddHandler(EVENT.UIServerAuth, () =>
+        {
+            if (GameManager.GetGM().IsMirror())
+            {
+                GameManager.GetVNM().EnterServerMode();
+            }
         });
     }
     public void AddHandler(EVENT evt, Action action)

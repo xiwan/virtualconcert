@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using PolyPerfect;
+using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     MonoBehaviour _cameraChangeScript;
     MonoBehaviour _randomCharacterPlacerScript;
 
-    Text _ccuTex;
+    NetworkBehaviour _followPlayer;
 
     public int selectedPlayer = 0;
 
@@ -32,9 +33,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject MainRig;
 
-    private AvatarManager _avatarManager;
-
-    private void Initialize()
+    public void Initialize()
     {
         // initialization goes here
         DataManager.Initialize();
@@ -43,7 +42,7 @@ public class GameManager : MonoBehaviour
         EventManager.Initialize();
     }
 
-    private void LoadData()
+    public void LoadData()
     {
         if (MirrorManager == null)
             MirrorManager = GetVNM();
@@ -51,7 +50,11 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.LoadPrefabsData();
 
         EventManager.Instance.LoadEvent();
+    }
 
+    public void CleanData()
+    {
+        PlayerPoolManager.Instance.ResetDataExcept(0);
     }
 
     [ContextMenu("Spawn Animals")]
@@ -90,7 +93,7 @@ public class GameManager : MonoBehaviour
         var player = PlayerPoolManager.Instance.GetAnyPlayer();
         if (player != null)
         {
-            player.moveController.takeOver = true;
+            player.playerController.takeOver = true;
             player.takeOver = true;
             SelectPlayer(player.instanceId);
         }
@@ -103,7 +106,7 @@ public class GameManager : MonoBehaviour
         {
             selectedPlayer = playerId;
             lastSelectedPlayer = selectedPlayer;
-            PlayerPoolManager.Instance.ResetDataExcept(playerId);
+            //PlayerPoolManager.Instance.ResetDataExcept(playerId);
         }
     }
 
@@ -118,17 +121,15 @@ public class GameManager : MonoBehaviour
     {
         _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();       
         _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
-        _ccuTex = GameObject.Find("Counter").GetComponent<Text>();
-
-        //StartCoroutine(UpdateUITask());
     }
 
     // Update is called once per frame
     void Update()
     {
-        SelectPlayerTask();
+        //SelectPlayerTask();
 
         //UpdateUITask();
+
     }
 
     private void SelectPlayerTask()
@@ -144,7 +145,8 @@ public class GameManager : MonoBehaviour
             resetCamera = false;
             if (selectedPlayer == 0)
             {
-                selectedPlayer = PickAnyPlayer().instanceId;
+                //selectedPlayer = PickAnyPlayer().instanceId;
+                //selectedPlayer = 
             }
         }
 
@@ -185,9 +187,7 @@ public class GameManager : MonoBehaviour
 
             if (this.IsMirror())
             {
-                //var characters = NetworkManager.singleton.spawnPrefabs.ToArray();
-
-
+                // to update client rig 
                 for (int i = 0; i < _instances.Length; i++)
                 {
                     var _fullname = _instances[i].name;
@@ -211,6 +211,7 @@ public class GameManager : MonoBehaviour
                     NetworkServer.Spawn(_instances[i]);
                 }
 
+                // to update client ccu ui
                 var rsp = new VirtualResponse
                 {
                     messageId = 0x0001,
@@ -218,6 +219,7 @@ public class GameManager : MonoBehaviour
                 };
 
                 NetworkServer.SendToReady(rsp);
+
             }
         }
         finally

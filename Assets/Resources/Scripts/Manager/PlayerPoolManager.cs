@@ -29,7 +29,7 @@ public class PlayerPoolManager : Single<PlayerPoolManager>
 
     public void ResetData(int id)
     {
-        //_playerPool[id].moveController.takeOver = false;
+        _playerPool[id].playerController.takeOver = false;
         _playerPool[id].takeOver = false;
     }
 
