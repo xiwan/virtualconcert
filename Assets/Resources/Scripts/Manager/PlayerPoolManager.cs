@@ -8,7 +8,6 @@ using Random = System.Random;
 
 public class PlayerPoolManager : Single<PlayerPoolManager>
 {
-
     private Dictionary<int, Player> _playerPool = new Dictionary<int, Player>();
 
     public void UpsertData(int id, Player obj)

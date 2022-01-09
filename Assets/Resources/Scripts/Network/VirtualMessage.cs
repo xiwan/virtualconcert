@@ -21,7 +21,8 @@ public struct VirtualResponse : NetworkMessage
 {
     public int messageId;
     public string content;
-    public int num;
+    public int playerNum;
+    public int aiNum;
     public byte[] payload;
 }
 

@@ -163,7 +163,7 @@ public class VirtualNetworkManager : NetworkManager
 
     void OnServerReceiveMsg(NetworkConnection conn, VirtualRequest msg)
     {
-        Debug.Log("called on server");
+        //Debug.Log("called on server");
         if (msg.messageId == 0x0001)
         {
             var parent = GameObject.Find("People/Players");
@@ -185,10 +185,10 @@ public class VirtualNetworkManager : NetworkManager
 
     void OnClientReceiveMsg(VirtualResponse msg)
     {
-        Debug.Log("called on client");
+        //Debug.Log("called on client");
         if (msg.messageId == 0x0001)
         {
-            GameManager.GetGM().UpdateUI(msg.num);
+            GameManager.GetGM().UpdateUI(msg.playerNum, msg.aiNum);
         }
     }
 

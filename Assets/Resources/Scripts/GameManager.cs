@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour
     MonoBehaviour _cameraChangeScript;
     MonoBehaviour _randomCharacterPlacerScript;
 
-    NetworkBehaviour _followPlayer;
-
     public int selectedPlayer = 0;
 
     public int lastSelectedPlayer = 0;
@@ -32,6 +30,8 @@ public class GameManager : MonoBehaviour
     public Dictionary<int, int> selectedPlayerDict = new Dictionary<int, int>();
 
     public GameObject MainRig;
+
+    private int AINum;
 
     public void Initialize()
     {
@@ -169,10 +169,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void  UpdateUI(int currentPlayerNum)
+    public void  UpdateUI(int playerNum, int aiNum)
     {
         var _ccuTex = GameObject.Find("Counter").GetComponent<Text>();
-        _ccuTex.text = "CCU: " + currentPlayerNum;
+        _ccuTex.text = "Player: " + playerNum + " AI:" + aiNum;
     }
 
     IEnumerator NetworkManagerSpawnAnimals()
@@ -184,6 +184,7 @@ public class GameManager : MonoBehaviour
             var parent = GameObject.Find("People/AIs");
             var characters = DataManager.Instance.NpcPrefabsList.ToArray();
             var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(MainRig, characters, parent, spawnAmount, spawnRadius);
+            AINum += _instances.Length;
 
             if (this.IsMirror())
             {
@@ -215,16 +216,16 @@ public class GameManager : MonoBehaviour
                 var rsp = new VirtualResponse
                 {
                     messageId = 0x0001,
-                    num = PlayerPoolManager.Instance.CountPlayer(),
+                    playerNum = PlayerPoolManager.Instance.CountPlayer(),
+                    aiNum = AINum
                 };
 
                 NetworkServer.SendToReady(rsp);
-
             }
         }
         finally
         {
-            UpdateUI(PlayerPoolManager.Instance.CountPlayer());
+            UpdateUI(PlayerPoolManager.Instance.CountPlayer(), AINum);
         }  
         
     }
