@@ -43,7 +43,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
 
     private AnimatorOverrideController _overrideController;
     private AnimatorOverrideController _currentController;
-    private MoveController _moveController;
     private CharacterController _characterController;
     //private CameraChange _cameraChangeScript;
     private WanderScript _wanderScript;
@@ -58,7 +57,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         _animator = transform.GetComponent<Animator>();
         _overrideController = Resources.Load<AnimatorOverrideController>(_swapAnimatorPath);
 
-        _moveController = transform.GetComponent<MoveController>();
         _characterController = transform.GetComponent<CharacterController>();
 
         _wanderScript = transform.GetComponent<WanderScript>();

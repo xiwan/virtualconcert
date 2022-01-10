@@ -13,13 +13,13 @@ public class GameManager : MonoBehaviour
     MonoBehaviour _cameraChangeScript;
     MonoBehaviour _randomCharacterPlacerScript;
 
-    public int selectedPlayer = 0;
+    private int selectedPlayer = 0;
 
-    public int lastSelectedPlayer = 0;
+    private int lastSelectedPlayer = 0;
 
-    public bool resetCamera = false;
+    private bool resetCamera = false;
 
-    public bool pickAnyPlayer = false;
+    private bool pickAnyPlayer = false;
 
     public float spawnRadius = 20;
 
@@ -27,11 +27,20 @@ public class GameManager : MonoBehaviour
 
     public NetworkManager MirrorManager;
 
-    public Dictionary<int, int> selectedPlayerDict = new Dictionary<int, int>();
-
     public GameObject MainRig;
 
     private int AINum;
+
+    public static GameManager GetGM()
+    {
+        return GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+
+    public static VirtualNetworkManager GetVNM()
+    {
+        return GameObject.Find("VirtualNetworkManager").GetComponent<VirtualNetworkManager>();
+    }
+
 
     public void Initialize()
     {
@@ -44,12 +53,12 @@ public class GameManager : MonoBehaviour
 
     public void LoadData()
     {
-        if (MirrorManager == null)
-            MirrorManager = GetVNM();
+        
         // data load goes here
         DataManager.Instance.LoadPrefabsData();
-
         EventManager.Instance.LoadEvent();
+
+        this.LoadGameObjects();
     }
 
     public void CleanData()
@@ -68,46 +77,16 @@ public class GameManager : MonoBehaviour
         return NetworkManager.singleton != null && NetworkManager.singleton.isNetworkActive;
     }
 
-    public static GameManager GetGM()
-    { 
-        return GameObject.Find("GameManager").GetComponent<GameManager>();
-    }
-
-    public static VirtualNetworkManager GetVNM()
-    { 
-        return GameObject.Find("VirtualNetworkManager").GetComponent<VirtualNetworkManager>();
-    }
-
-    public void SelectPlayer(int playerId)
+    public void LoadGameObjects()
     {
-        lastSelectedPlayer = selectedPlayer;
-        selectedPlayer = playerId;
-        if (lastSelectedPlayer != selectedPlayer)
-        {
-            PlayerPoolManager.Instance.ResetDataExcept(selectedPlayer);
-        }
-    }
-
-    public Player PickAnyPlayer()
-    {
-        var player = PlayerPoolManager.Instance.GetAnyPlayer();
-        if (player != null)
-        {
-            player.playerController.takeOver = true;
-            player.takeOver = true;
-            SelectPlayer(player.instanceId);
-        }
-        return player;
-    }
-
-    public void DeselectPlayer(int playerId)
-    {
-        if (playerId == 0)
-        {
-            selectedPlayer = playerId;
-            lastSelectedPlayer = selectedPlayer;
-            //PlayerPoolManager.Instance.ResetDataExcept(playerId);
-        }
+        if (MirrorManager == null)
+            MirrorManager = GetVNM();
+        if (MainRig == null)
+            MainRig = (GameObject)Resources.Load("Prefabs/Network/MainRigAll");
+        if (_cameraChangeScript == null)
+            _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
+        if (_randomCharacterPlacerScript == null)
+            _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
     }
 
     void Awake()
@@ -119,8 +98,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();       
-        _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
+
     }
 
     // Update is called once per frame
@@ -130,43 +108,6 @@ public class GameManager : MonoBehaviour
 
         //UpdateUITask();
 
-    }
-
-    private void SelectPlayerTask()
-    {
-        if (resetCamera)
-        {
-            pickAnyPlayer = false;
-            selectedPlayer = 0;
-        }
-
-        if (pickAnyPlayer)
-        {
-            resetCamera = false;
-            if (selectedPlayer == 0)
-            {
-                //selectedPlayer = PickAnyPlayer().instanceId;
-                //selectedPlayer = 
-            }
-        }
-
-        if (selectedPlayer == 0)
-        {
-            DeselectPlayer(0);
-            ((CameraChange)_cameraChangeScript).CameraSwitch(false);
-        }
-        else
-        {
-            var player = PlayerPoolManager.Instance.GetPlayer(selectedPlayer);
-            if (player != null)
-            {
-                var follower = player.follower;
-                var target = player.moveController;
-                ((CameraChange)_cameraChangeScript).CameraFollow(follower.transform, target.transform, new Vector3(0, 1.8f, 0));
-                ((CameraChange)_cameraChangeScript).CameraSwitch(true);
-            }
-             
-        }
     }
 
     public void  UpdateUI(int playerNum, int aiNum)

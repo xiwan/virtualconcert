@@ -10,8 +10,6 @@ public class Player : NetworkBehaviour
     public string instanceName;
     public bool takeOver;
     public GameObject follower;
-    public MoveController moveController;
     public VirtualAvatarPlayer playerController;
-
 
 }
