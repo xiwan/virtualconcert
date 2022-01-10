@@ -103,6 +103,10 @@
     <Compile Include="Assets\Resources\Scripts\Helper\MathHelper.cs" />
     <Compile Include="Assets\Imported\polyperfect\- Scripts\AIScripts\WanderManager.cs" />
     <Compile Include="Assets\Resources\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Controller\Server\ServerHandler.cs" />
+    <Compile Include="Assets\Resources\Scripts\Controller\ServerRouteTable.cs" />
+    <Compile Include="Assets\Resources\Scripts\Controller\Client\ClientHandler.cs" />
+    <Compile Include="Assets\Resources\Scripts\Controller\ClientRouteTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Imported\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />

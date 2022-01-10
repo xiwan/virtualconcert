@@ -43,30 +43,6 @@ public class VirtualNetworkManager : NetworkManager
 
     }
 
-    public void EnterClientMode()
-    {
-        var networkId = GetNetId();
-        var msg = new VirtualRequest
-        {
-            messageId = 0x0002,
-            networkId = Convert.ToInt32(networkId),
-            takeOver = true
-        };
-        NetworkClient.connection.Send(msg);
-    }
-
-    public void EnterServerMode()
-    {
-        var networkId = GetNetId();
-        var msg = new VirtualRequest
-        {
-            messageId = 0x0002,
-            networkId = Convert.ToInt32(networkId),
-            takeOver = false
-        };
-        NetworkClient.connection.Send(msg);
-    }
-
     public override void Awake()
     {
         base.Awake();
@@ -88,7 +64,7 @@ public class VirtualNetworkManager : NetworkManager
     {
         base.OnStartServer();
 
-        NetworkServer.RegisterHandler<VirtualRequest>(OnServerReceiveMsg);
+        NetworkServer.RegisterHandler<VirtualRequest>(ServerRouteTable.Instance.ReceiveMsg);
     }
 
     public override void OnStopServer()
@@ -110,7 +86,7 @@ public class VirtualNetworkManager : NetworkManager
         // need serilizer later
         VirtualRequest msg = new VirtualRequest
         {
-            messageId = 0x0001,
+            messageId = ServerMsgType.ClientLogin,
             content = "woman-police",
             message = new Avatar
             {
@@ -122,18 +98,13 @@ public class VirtualNetworkManager : NetworkManager
         };
 
         NetworkClient.connection.Send(msg);
-
     }
 
     public override void OnStartClient()
     {
         base.OnStartClient();
 
-        NetworkClient.RegisterHandler<VirtualResponse>(OnClientReceiveMsg);
-        // generate a new unique assetId 
-        //System.Guid creatureAssetId = System.Guid.NewGuid();
-
-        //NetworkClient.RegisterSpawnHandler(creatureAssetId, SpawnDelegate, UnSpawnDelegate);
+        NetworkClient.RegisterHandler<VirtualResponse>(ClientRouteTable.Instance.ReceiveMsg);
         NetworkClient.RegisterPrefab(MainRig);
     }
 
@@ -159,37 +130,6 @@ public class VirtualNetworkManager : NetworkManager
 
         _cameraChangeScript.CameraFollow(follower.transform, target.transform, new Vector3(0, 1.8f, 0));
         _cameraChangeScript.CameraSwitch(flag);
-    }
-
-    void OnServerReceiveMsg(NetworkConnection conn, VirtualRequest msg)
-    {
-        //Debug.Log("called on server");
-        if (msg.messageId == 0x0001)
-        {
-            var parent = GameObject.Find("People/Players");
-            var spawnedInstance = AvatarManager.Instance.SpawnPlayerFromAvatar(MainRig, msg.message, parent.transform);
-
-            // call this to use this gameobject as the primary controller
-
-            NetworkServer.AddPlayerForConnection(conn, spawnedInstance);
-            //NetworkServer.Spawn(spawnedInstance);
-        }
-        else if (msg.messageId == 0x0002)
-        {
-            var player = PlayerPoolManager.Instance.GetPlayer(msg.networkId);
-            player.takeOver = msg.takeOver;
-            player.playerController.takeOver = msg.takeOver;
-            player.playerController._moveData = msg.moveData;;
-        }
-    }
-
-    void OnClientReceiveMsg(VirtualResponse msg)
-    {
-        //Debug.Log("called on client");
-        if (msg.messageId == 0x0001)
-        {
-            GameManager.GetGM().UpdateUI(msg.playerNum, msg.aiNum);
-        }
     }
 
 

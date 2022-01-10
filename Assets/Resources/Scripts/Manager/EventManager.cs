@@ -38,18 +38,12 @@ public class EventManager : Single<EventManager>
 
         this.AddHandler(EVENT.UIClientAuth, () =>
         {
-            if (GameManager.GetGM().IsMirror())
-            {
-                GameManager.GetVNM().EnterClientMode();
-            }
+
         });
 
         this.AddHandler(EVENT.UIServerAuth, () =>
         {
-            if (GameManager.GetGM().IsMirror())
-            {
-                GameManager.GetVNM().EnterServerMode();
-            }
+
         });
     }
     public void AddHandler(EVENT evt, Action action)

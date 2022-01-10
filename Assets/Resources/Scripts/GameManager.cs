@@ -9,18 +9,6 @@ using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
-
-    MonoBehaviour _cameraChangeScript;
-    MonoBehaviour _randomCharacterPlacerScript;
-
-    private int selectedPlayer = 0;
-
-    private int lastSelectedPlayer = 0;
-
-    private bool resetCamera = false;
-
-    private bool pickAnyPlayer = false;
-
     public float spawnRadius = 20;
 
     public int spawnAmount = 20;
@@ -29,7 +17,11 @@ public class GameManager : MonoBehaviour
 
     public GameObject MainRig;
 
-    private int AINum;
+    private MonoBehaviour _randomCharacterPlacerScript;
+
+    public int PlayerNum;
+
+    public int AINum;
 
     public static GameManager GetGM()
     {
@@ -49,6 +41,9 @@ public class GameManager : MonoBehaviour
         AvatarManager.Initialize();
         PlayerPoolManager.Initialize();
         EventManager.Initialize();
+
+        ServerRouteTable.Initialize();
+        ClientRouteTable.Initialize();
     }
 
     public void LoadData()
@@ -59,6 +54,9 @@ public class GameManager : MonoBehaviour
         EventManager.Instance.LoadEvent();
 
         this.LoadGameObjects();
+
+        ServerRouteTable.Instance.RegisterHandlers();
+        ClientRouteTable.Instance.RegisterHandlers();
     }
 
     public void CleanData()
@@ -83,8 +81,6 @@ public class GameManager : MonoBehaviour
             MirrorManager = GetVNM();
         if (MainRig == null)
             MainRig = (GameObject)Resources.Load("Prefabs/Network/MainRigAll");
-        if (_cameraChangeScript == null)
-            _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
         if (_randomCharacterPlacerScript == null)
             _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
     }
@@ -156,7 +152,7 @@ public class GameManager : MonoBehaviour
                 // to update client ccu ui
                 var rsp = new VirtualResponse
                 {
-                    messageId = 0x0001,
+                    messageId = ClientMsgType.UpdateUI,
                     playerNum = PlayerPoolManager.Instance.CountPlayer(),
                     aiNum = AINum
                 };
@@ -166,7 +162,8 @@ public class GameManager : MonoBehaviour
         }
         finally
         {
-            UpdateUI(PlayerPoolManager.Instance.CountPlayer(), AINum);
+            PlayerNum = PlayerPoolManager.Instance.CountPlayer();
+            UpdateUI(PlayerNum, AINum);
         }  
         
     }

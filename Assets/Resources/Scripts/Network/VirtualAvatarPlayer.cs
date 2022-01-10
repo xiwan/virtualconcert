@@ -333,7 +333,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
 
         var msg = new VirtualRequest
         {
-            messageId = 0x0002,
+            messageId = ServerMsgType.ClientTakeOver,
             networkId = Convert.ToInt32(netId),
             takeOver = value,
             moveData = _moveData
