@@ -84,6 +84,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             this.transform.SetParent(parent.transform, false);
             this.takeOver = true;
             TakeOverEventOn();
+            StartCoroutine(OutlineCharacter(0.02f));
         }
         if (avatar.type == CHARACTER.AI)
         {
@@ -97,13 +98,13 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
+
         _moveData = new MoveData();
         if (_player == null)
         {
             this.takeOver = false;
             _player = gameObject.AddComponent<Player>();
             _player.instanceId = GetInstanceID();
-            //_player.moveController = _moveController;
             _player.playerController = this;
             _player.takeOver = this.takeOver;
 
@@ -124,21 +125,58 @@ public class VirtualAvatarPlayer : NetworkBehaviour
 
     public void Update()
     {
+        
+    
+    }
+
+    public void FixedUpdate()
+    {
+        OnSimulateBefore();
+        Simulate();
+        OnSimulateAfter();
+    }
+
+    void Simulate()
+    {
         if (isClient)
         {
             ClientUpdate();
         }
-
         else if (isServer)
         {
             ServerUpdate();
         }
-    
+
+    }
+
+    void OnSimulateBefore()
+    {
+        if (isClient)
+        {
+            
+        }
+        else if (isServer)
+        {
+
+        }
+    }
+
+    void OnSimulateAfter()
+    {
+        if (takeOver)
+        {
+            // server & client 
+            MoveAnimation(_moveData);
+            
+        }
     }
 
     private void ClientUpdate()
     {
-        MoveLikeWoW();
+        if (takeOver)
+        {
+            MoveLikeWoW();
+        }
     }
 
     private void ServerUpdate()
@@ -154,6 +192,121 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         }
     }
 
+    private void MoveLikeWoW()
+    {
+        if (isClient && connectionToServer != null)
+        {
+            MoveCharacter(netIdentity.netId);
+        }
+        else if (isServer)
+        {
+            if (_moveData.walk)
+            {
+                var h = _moveData.horizontal;
+                var v = _moveData.vertical;
+                _velocity.y += gravity * Time.fixedDeltaTime;
+
+                _characterController.Move(transform.forward * speed * v * Time.fixedDeltaTime);
+                _characterController.Move(_velocity * Time.fixedDeltaTime);
+                transform.Rotate(Vector3.up, h * rotateSpeed * 2);
+
+            }
+
+        }
+    }
+
+
+    [Command]
+    public void SpawnAIsOnServer()
+    {
+        GameManager.GetGM().SpawnAnimals();
+    }
+
+    private IEnumerator OutlineCharacter(float value)
+    {
+        yield return new WaitForSeconds((UnityEngine.Random.Range(0, 200) / 100));
+        Material[] materials = GetComponentInChildren<SkinnedMeshRenderer>().materials;
+        materials[1].SetFloat("_OutlineFactor", value);
+    }
+
+    public void MoveAnimation(MoveData moveData)
+    {
+        if (_moveData.walk)
+        {
+            _isWalking = true;
+            _isJumping = false;
+            _isDancing = false;
+
+        }
+        else if (_moveData.jump)
+        {
+            _isJumping = (IsGround(_groundCheck) && !_isJumping);
+            if (_isJumping)
+            {
+                //_velocity.y += Mathf.Sqrt(jumpHeight * -2 * gravity);
+
+                _isWalking = false;
+                _isJumping = true;
+                _isDancing = false;
+            }
+
+
+        }
+        else if (_moveData.dance)
+        {
+            _isDancing = (IsGround(_groundCheck) && !_isDancing);
+            if (_isDancing)
+            {
+                _isWalking = false;
+                _isJumping = false;
+                _isDancing = true;
+            }
+        }
+
+        _animator.SetFloat("Speed", moveData.speed);
+        _animator.SetBool("isBlending", moveData.speed > 0);
+        _animator.SetBool("isJumping", _isJumping);
+        _animator.SetBool("isDancing", _isDancing);
+    }
+
+    private void MoveCharacter(uint netId)
+    {
+        var h = Input.GetAxis("Horizontal");
+        var v = Input.GetAxis("Vertical");
+        _moveData = new MoveData
+        {
+            horizontal = h,
+            vertical = v,
+            speed = 0,
+            walk = (h != 0 || v != 0),
+            jump = Input.GetKey(KeyCode.Space),
+            dance = Input.GetKey(KeyCode.E),
+            sprint = Input.GetKey(KeyCode.LeftShift),
+        };
+
+        if (_moveData.walk)
+        {
+            _moveData.speed = (_moveData.sprint) ? 0.9f : 0.5f;
+        }
+
+        var msg = new VirtualRequest
+        {
+            messageId = ServerMsgType.ClientTakeOver,
+            networkId = Convert.ToInt32(netId),
+            takeOver = true,
+            moveData = _moveData
+        };
+        connectionToServer.Send(msg);
+   
+    }
+
+    private bool IsGround(Transform obj)
+    {
+        if (obj == null)
+            obj = transform.Find("GroundCheck");
+        _isGrounded = Physics.CheckSphere(obj.position, groundCheckRadius, layerMask);
+        return _isGrounded;
+    }
 
     public void TakeOverEventOn()
     {
@@ -176,8 +329,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             }
         }
 
-        //GameManager.GetGM().SelectPlayer(_player.networkId);
-        //StartCoroutine(OutlineCharacter(0.02f));
     }
 
     public void TakeOverEventOff()
@@ -200,136 +351,8 @@ public class VirtualAvatarPlayer : NetworkBehaviour
                 _animator.runtimeAnimatorController = _currentController;
             }
         }
-        //GameManager.GetGM().DeselectPlayer(_player.networkId);
-        //StartCoroutine(OutlineCharacter(0));
-    }
-
-    private void MoveLikeWoW()
-    {
-        if (isClient && connectionToServer != null)
-        {
-            MoveCharacter(netIdentity.netId, takeOver);
-            //CameraFollow(takeOver);
-            StartCoroutine(OutlineCharacter(0.02f));
-        }
-        else if (isServer)
-        {
-            _characterController.Move(_moveData.hmove);
-            _characterController.Move(_moveData.vmove);
-            transform.Rotate(Vector3.up, _moveData.angle);
-        }
-    }
-
-
-    [Command]
-    public void SpawnAIsOnServer()
-    {
-        GameManager.GetGM().SpawnAnimals();
-    }
-
-    [Command]
-    public void PickAnyAIOnServer()
-    {
-        //GameManager.GetGM().PickAnyPlayer();
 
     }
-
-    private IEnumerator OutlineCharacter(float value)
-    {
-        yield return new WaitForSeconds((UnityEngine.Random.Range(0, 200) / 100));
-        Material[] materials = GetComponentInChildren<SkinnedMeshRenderer>().materials;
-        materials[1].SetFloat("_OutlineFactor", value);
-    }
-
-    private IEnumerator MoveCharacterAnimation(MoveData moveData)
-    {
-        yield return new WaitForSeconds((UnityEngine.Random.Range(0, 200) / 100));
-
-        var _speed = 0f;
-        if (moveData.horizontal != 0 || moveData.vertical != 0)
-        {
-            _animator.SetBool("isBlending", true);
-            _speed = 0.5f;
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                _speed = 0.9f;
-            }
-        }
-        else
-        {
-            _animator.SetBool("isBlending", false);
-        }
-
-        _animator.SetFloat("Speed", _speed);
-        _animator.SetBool("isJumping", _isJumping);
-        _animator.SetBool("isDancing", _isDancing);
-    }
-
-    private void MoveCharacter(uint netId, bool value = false)
-    {
-        if (connectionToServer == null) return;
-
-        var h = Input.GetAxis("Horizontal");
-        var v = Input.GetAxis("Vertical");
-
-        _velocity.y += gravity * Time.deltaTime;
-
-        /*
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (isGround(_groundCheck) && !_isJumping)
-            {
-                _velocity.y += Mathf.Sqrt(jumpHeight * -2 * gravity);
-                _isJumping = true;
-            }
-            else
-            {
-                _isJumping = false;
-            }
-        }
-        else if (Input.GetKey(KeyCode.E))
-        {
-            if (isGround(_groundCheck) && !_isDancing)
-            {
-                _isDancing = true;
-            }
-            else
-            {
-                _isDancing = false;
-            }
-        }*/
-
-
-        var _moveData = new MoveData
-        {
-            horizontal = h,
-            vertical = v,
-            hmove = transform.forward * speed * v * Time.deltaTime,
-            vmove = _velocity * Time.deltaTime,
-            angle = h * rotateSpeed,
-        };
-
-        var msg = new VirtualRequest
-        {
-            messageId = ServerMsgType.ClientTakeOver,
-            networkId = Convert.ToInt32(netId),
-            takeOver = value,
-            moveData = _moveData
-        };
-        connectionToServer.Send(msg);
-
-        StartCoroutine(MoveCharacterAnimation(_moveData));
-   
-    }
-
-    private bool isGround(Transform obj)
-    {
-        if (obj == null)
-            obj = transform.Find("GroundCheck");
-        _isGrounded = Physics.CheckSphere(obj.position, groundCheckRadius, layerMask);
-        return _isGrounded;
-    }
-
 
 }
 

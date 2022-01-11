@@ -38,6 +38,16 @@ public class VirtualNetworkManager : NetworkManager
         return !ServerOwn() && !NetworkClient.connection.identity.hasAuthority;
     }
 
+    public void SetFixedDeltaTimeForServer()
+    {
+        Time.fixedDeltaTime = 1f / 30;
+    }
+
+    public void SetFixedDeltaTimeForClient()
+    {
+        Time.fixedDeltaTime = 1f / 30;
+    }
+
     // only called on client
     public GameObject GetConnPlayer()
     {
@@ -74,6 +84,14 @@ public class VirtualNetworkManager : NetworkManager
     public override void Awake()
     {
         base.Awake();
+        if (this.IsClient())
+        {
+            SetFixedDeltaTimeForClient();
+        }
+        else
+        {
+            SetFixedDeltaTimeForServer();
+        }
 
     }
 
@@ -82,7 +100,7 @@ public class VirtualNetworkManager : NetworkManager
         base.Start();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
 
     }

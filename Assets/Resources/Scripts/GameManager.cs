@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour
     private GameObject _followerTarget;
     private GameObject _follower;
 
-
     public static GameManager GetGM()
     {
         return GameObject.Find("GameManager").GetComponent<GameManager>();

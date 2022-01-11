@@ -33,9 +33,13 @@ public struct VirtualAvatarCreateMessage
 
 public class MoveData
 {
-    public float horizontal;
-    public float vertical;
-    public Vector3 hmove;
-    public Vector3 vmove;
-    public float angle;
+    public float horizontal = 0;
+    public float vertical = 0;
+    public float speed = 0;
+
+    public bool idle = false;
+    public bool walk = false;
+    public bool jump = false;
+    public bool dance = false;
+    public bool sprint = false;
 }
