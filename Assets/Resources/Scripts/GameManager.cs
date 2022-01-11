@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     public int spawnAmount = 20;
 
-    public NetworkManager MirrorManager;
+    public VirtualNetworkManager MirrorManager;
 
     public GameObject MainRig;
 
@@ -22,6 +22,11 @@ public class GameManager : MonoBehaviour
     public int PlayerNum;
 
     public int AINum;
+
+    private CameraChange _cameraChangeScript;
+    private GameObject _followerTarget;
+    private GameObject _follower;
+
 
     public static GameManager GetGM()
     {
@@ -70,11 +75,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(NetworkManagerSpawnAnimals());        
     }
 
-    public bool IsMirror()
-    {
-        return NetworkManager.singleton != null && NetworkManager.singleton.isNetworkActive;
-    }
-
     public void LoadGameObjects()
     {
         if (MirrorManager == null)
@@ -83,6 +83,10 @@ public class GameManager : MonoBehaviour
             MainRig = (GameObject)Resources.Load("Prefabs/Network/MainRigAll");
         if (_randomCharacterPlacerScript == null)
             _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
+        if (_cameraChangeScript == null)
+            _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
+        if (_follower == null)
+            _follower = GameObject.Find("Follower");
     }
 
     void Awake()
@@ -100,10 +104,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //SelectPlayerTask();
-
-        //UpdateUITask();
-
+        if (MirrorManager != null && MirrorManager.IsClient())
+        {
+            CameraFollow(true, _followerTarget);
+        }
     }
 
     public void  UpdateUI(int playerNum, int aiNum)
@@ -115,59 +119,21 @@ public class GameManager : MonoBehaviour
     IEnumerator NetworkManagerSpawnAnimals()
     {
         yield return new WaitForSeconds((Random.Range(0, 200) / 100));
-
-        try 
-        {
-            var parent = GameObject.Find("People/AIs");
-            var characters = DataManager.Instance.NpcPrefabsList.ToArray();
-            var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(MainRig, characters, parent, spawnAmount, spawnRadius);
-            AINum += _instances.Length;
-
-            if (this.IsMirror())
-            {
-                // to update client rig 
-                for (int i = 0; i < _instances.Length; i++)
-                {
-                    var _fullname = _instances[i].name;
-                    var _avatarname = _fullname.Split('_')[0];
-                    var _avatarid = _fullname.Split('_')[1];
-                    var _avatar = new Avatar()
-                    {
-                        id = ToolsManager.ParseInt32(_avatarid),
-                        type = CHARACTER.AI, // ai
-                        aname = _avatarname,
-                        animatorController = _instances[i].GetComponent<Animator>().runtimeAnimatorController.name,
-                        postion = _instances[i].transform.position,
-                        rotation = _instances[i].transform.rotation,
-                        scale = _instances[i].transform.localScale
-                    };
-
-                    var aiAvatar = _instances[i].GetComponent<VirtualAvatarPlayer>();
-                    aiAvatar.avatar = _avatar;
-
-                    // server spawn the instance
-                    NetworkServer.Spawn(_instances[i]);
-                }
-
-                // to update client ccu ui
-                var rsp = new VirtualResponse
-                {
-                    messageId = ClientMsgType.UpdateUI,
-                    playerNum = PlayerPoolManager.Instance.CountPlayer(),
-                    aiNum = AINum
-                };
-
-                NetworkServer.SendToReady(rsp);
-            }
-        }
-        finally
-        {
-            PlayerNum = PlayerPoolManager.Instance.CountPlayer();
-            UpdateUI(PlayerNum, AINum);
-        }  
+        ServerHandler.SpawnAIs(null, new VirtualRequest());
         
     }
-
+    private void CameraFollow(bool flag, GameObject target)
+    {
+        if (target == null)
+        {
+            target = MirrorManager.GetConnPlayer();
+        };
+        if (target != null)
+        {
+            _cameraChangeScript.CameraFollow(_follower.transform, target.transform, new Vector3(0, 1.8f, 0));
+            _cameraChangeScript.CameraSwitch(flag);
+        }
+    }
 
 
 }

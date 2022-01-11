@@ -10,6 +10,8 @@ public enum EVENT
     UIPickAny = 1,
     UIClientAuth = 2,
     UIServerAuth = 3,
+
+    CameraFollow = 10,
 };
 
 public class EventManager : Single<EventManager>
@@ -21,7 +23,7 @@ public class EventManager : Single<EventManager>
     {
         this.AddHandler(EVENT.UISpawnAIs, () =>
         {
-            if (GameManager.GetGM().IsMirror())
+            if (GameManager.GetVNM().IsActive())
             {
                 GameManager.GetVNM().CommandOnServer(EVENT.UISpawnAIs);
             }

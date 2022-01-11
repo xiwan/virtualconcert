@@ -7,16 +7,44 @@ using UnityEngine;
 
 public class VirtualNetworkManager : NetworkManager
 {
-    public GameObject MainRig;
 
-    CameraChange _cameraChangeScript;
-    private Transform _groundCheck;
+    public bool IsActive()
+    {
+        return this != null && this.isNetworkActive;
+    }
 
+    public bool IsServer()
+    {
+        return NetworkClient.connection != null && NetworkClient.connection.identity.isServer;
+    }
+
+    public bool IsClient()
+    {
+        return NetworkClient.connection != null && NetworkClient.connection.isReady;
+    }
+
+    public bool ServerOwn()
+    {
+        return NetworkClient.connection != null && NetworkClient.connection.identity.connectionToClient == null;
+    }
+
+    public bool ClientOwn()
+    {
+        return !ServerOwn() && NetworkClient.connection.identity.hasAuthority;
+    }
+
+    public bool ProxyOwn()
+    {
+        return !ServerOwn() && !NetworkClient.connection.identity.hasAuthority;
+    }
 
     // only called on client
-    NetworkBehaviour GetConnPlayer()
+    public GameObject GetConnPlayer()
     {
-        var playerAvatar = NetworkClient.connection.identity.gameObject.GetComponent<VirtualAvatarPlayer>();
+        if (!NetworkClient.connection.isReady) return null;
+        if (!NetworkClient.connection.identity) return null;
+
+        var playerAvatar = NetworkClient.connection.identity.gameObject;
         if (playerAvatar == null)
         {
             throw new Exception("not found alive conn");
@@ -25,7 +53,7 @@ public class VirtualNetworkManager : NetworkManager
     }
 
     // only called on client
-    uint GetNetId()
+    public uint GetNetId()
     {
         return NetworkClient.connection.identity.netId;
     }
@@ -34,7 +62,7 @@ public class VirtualNetworkManager : NetworkManager
     {
         if (evt == EVENT.UISpawnAIs)
         {
-            (GetConnPlayer() as VirtualAvatarPlayer).SpawnAIsOnServer();
+            GetConnPlayer().GetComponent<VirtualAvatarPlayer>().SpawnAIsOnServer();
         }
         else if(evt == EVENT.UIPickAny)
         {
@@ -52,12 +80,11 @@ public class VirtualNetworkManager : NetworkManager
     public override void Start()
     {
         base.Start();
-        //_cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
     }
 
     private void Update()
     {
-        //CameraFollow(true);
+
     }
 
     public override void OnStartServer()
@@ -105,7 +132,7 @@ public class VirtualNetworkManager : NetworkManager
         base.OnStartClient();
 
         NetworkClient.RegisterHandler<VirtualResponse>(ClientRouteTable.Instance.ReceiveMsg);
-        NetworkClient.RegisterPrefab(MainRig);
+        NetworkClient.RegisterPrefab(GameManager.GetGM().MainRig);
     }
 
     public override void OnClientDisconnect()
@@ -122,15 +149,5 @@ public class VirtualNetworkManager : NetworkManager
     {
         base.OnClientNotReady();
     }
-
-    private void CameraFollow(bool flag)
-    {
-        var follower = GameObject.Find("Follower");
-        var target = GetConnPlayer();
-
-        _cameraChangeScript.CameraFollow(follower.transform, target.transform, new Vector3(0, 1.8f, 0));
-        _cameraChangeScript.CameraSwitch(flag);
-    }
-
 
 }

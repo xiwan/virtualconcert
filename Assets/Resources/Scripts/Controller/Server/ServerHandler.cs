@@ -44,7 +44,7 @@ public class ServerHandler
             GM.AINum += _instances.Length;
             GM.PlayerNum = PlayerPoolManager.Instance.CountPlayer();
 
-            if (GM.IsMirror())
+            if (GM.MirrorManager.IsActive())
             {
                 // to update client rig 
                 for (int i = 0; i < _instances.Length; i++)
@@ -84,7 +84,7 @@ public class ServerHandler
                 playerNum = GM.PlayerNum,
                 aiNum = GM.AINum
             };
-            conn.Send(rsp);
+            NetworkServer.SendToReady(rsp);
         }
     }
 }

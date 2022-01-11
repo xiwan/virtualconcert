@@ -138,7 +138,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
 
     private void ClientUpdate()
     {
-        ClientAuthMove(takeOver);
+        MoveLikeWoW();
     }
 
     private void ServerUpdate()
@@ -146,7 +146,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         if (takeOver)
         {
             TakeOverEventOn();
-
             MoveLikeWoW();
         }
         else
@@ -205,23 +204,12 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         //StartCoroutine(OutlineCharacter(0));
     }
 
-    private void ClientAuthMove(bool takeOver)
-    {
-        MoveLikeWoW();
-        
-    }
-
-    private void ServerAuthMove()
-    {
-        //StartCoroutine(MoveCharacter(netIdentity.netId, false));
-    }
-
     private void MoveLikeWoW()
     {
         if (isClient && connectionToServer != null)
         {
             MoveCharacter(netIdentity.netId, takeOver);
-            CameraFollow(takeOver);
+            //CameraFollow(takeOver);
             StartCoroutine(OutlineCharacter(0.02f));
         }
         else if (isServer)
@@ -277,16 +265,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         _animator.SetBool("isDancing", _isDancing);
     }
 
-    private void CameraFollow(bool flag)
-    {
-        var _cameraChangeScript = GameObject.Find("CameraGroups").GetComponent<CameraChange>();
-        var follower = GameObject.Find("Follower");
-        var target = this;
-
-        _cameraChangeScript.CameraFollow(follower.transform, target.transform, new Vector3(0, 1.8f, 0));
-        _cameraChangeScript.CameraSwitch(flag);
-    }
-
     private void MoveCharacter(uint netId, bool value = false)
     {
         if (connectionToServer == null) return;
@@ -296,7 +274,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
 
         _velocity.y += gravity * Time.deltaTime;
 
-
+        /*
         if (Input.GetButtonDown("Jump"))
         {
             if (isGround(_groundCheck) && !_isJumping)
@@ -319,7 +297,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             {
                 _isDancing = false;
             }
-        }
+        }*/
 
 
         var _moveData = new MoveData
