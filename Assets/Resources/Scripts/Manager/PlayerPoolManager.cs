@@ -32,6 +32,19 @@ public class PlayerPoolManager : Single<PlayerPoolManager>
         _playerPool[id].takeOver = false;
     }
 
+    public void RemoveData(int id)
+    {
+        if (_playerPool.ContainsKey(id))
+        {
+            _playerPool.Remove(id);
+        }
+    }
+
+    public void RemoveAllData()
+    {
+        _playerPool = new Dictionary<int, Player>();
+    }
+
     public int GetSelectedId()
     {
         foreach (KeyValuePair<int, Player> keyVal in _playerPool)

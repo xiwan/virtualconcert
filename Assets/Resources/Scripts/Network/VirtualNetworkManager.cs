@@ -5,9 +5,18 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VirtualNetworkManager : NetworkManager
 {
+
+    public void UpdateUI()
+    {
+        var PlayerNum = GameObject.Find("People/Players").transform.childCount;
+        var AINum = GameObject.Find("People/AIs").transform.childCount;
+        var _ccuTex = GameObject.Find("Counter").GetComponent<Text>();
+        _ccuTex.text = "Player: " + PlayerNum + " AI:" + AINum;
+    }
 
     public bool IsActive()
     {
@@ -91,6 +100,11 @@ public class VirtualNetworkManager : NetworkManager
 
     }
 
+    void Update()
+    {
+        UpdateUI();
+    }
+
     IEnumerator BroadCastMsgToAll()
     {
         while (true)
@@ -139,6 +153,14 @@ public class VirtualNetworkManager : NetworkManager
         Debug.Log("======================");
     }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        NetworkClient.RegisterHandler<VirtualResponse>(ClientRouteTable.Instance.ReceiveMsg);
+        NetworkClient.RegisterPrefab(GameManager.GetGM().MainRig);
+    }
+
     public override void OnClientConnect()
     {
         base.OnClientConnect();
@@ -165,16 +187,19 @@ public class VirtualNetworkManager : NetworkManager
         NetworkClient.connection.Send(msg);
     }
 
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-
-        NetworkClient.RegisterHandler<VirtualResponse>(ClientRouteTable.Instance.ReceiveMsg);
-        NetworkClient.RegisterPrefab(GameManager.GetGM().MainRig);
-    }
-
     public override void OnClientDisconnect()
     {
+       
+
+        // need serilizer later
+        VirtualRequest msg = new VirtualRequest
+        {
+            messageId = ServerMsgType.ClientLogout,
+            networkId = Convert.ToInt32(GetNetId()),
+        };
+
+        NetworkClient.connection.Send(msg);
+
         base.OnClientDisconnect();
     }
 

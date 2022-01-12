@@ -11,4 +11,5 @@ public class TimeHelper
     {
         return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000;
     }
+
 }

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 
 public enum ServerMsgType
-{ 
+{
+    ClientLogout = 0x0009,
     ClientLogin = 0x0010,
     ClientTakeOver = 0x0011,
     SpawnAIs = 0x0012
@@ -25,7 +26,9 @@ public class ServerRouteTable : Single<ServerRouteTable>
     }
 
     public void RegisterHandlers()
-    {
+    { 
+
+        Route.Add(ServerMsgType.ClientLogout, ServerHandler.ClientLogout);
         Route.Add(ServerMsgType.ClientLogin, ServerHandler.ClientLogin);
         Route.Add(ServerMsgType.ClientTakeOver, ServerHandler.ClientTakeOver);
         Route.Add(ServerMsgType.SpawnAIs, ServerHandler.SpawnAIs);

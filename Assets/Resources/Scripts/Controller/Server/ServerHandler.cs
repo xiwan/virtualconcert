@@ -1,15 +1,19 @@
 ﻿using Mirror;
 using PolyPerfect;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class ServerHandler
 {
     public static GameManager GM = GameManager.GetGM();
+
+    
     public static void ClientLogin(NetworkConnection conn, VirtualRequest msg)
     {
         var mainRig = GM.MainRig;
@@ -18,6 +22,13 @@ public class ServerHandler
 
         // call this to use this gameobject as the primary controller
         NetworkServer.AddPlayerForConnection(conn, spawnedInstance);
+    }
+
+    public static void ClientLogout(NetworkConnection conn, VirtualRequest msg)
+    {
+        Debug.Log("xxxxxxx");
+        Debug.Log(msg.networkId);
+        PlayerPoolManager.Instance.RemoveData(msg.networkId);
     }
 
     public static void ClientTakeOver(NetworkConnection conn, VirtualRequest msg)
@@ -51,8 +62,8 @@ public class ServerHandler
             var characters = DataManager.Instance.NpcPrefabsList.ToArray();
             var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(mainRig, characters, parent, spawnAmount, spawnRadius);
 
-            GM.AINum += _instances.Length;
-            GM.PlayerNum = PlayerPoolManager.Instance.CountPlayer();
+            //GM.MirrorManager.AINum += _instances.Length;
+            //GM.MirrorManager.PlayerNum = PlayerPoolManager.Instance.CountPlayer();
 
             if (GM.MirrorManager.IsActive())
             {
@@ -79,25 +90,22 @@ public class ServerHandler
                     // server spawn the instance
                     NetworkServer.Spawn(_instances[i]);
                 }
-
-                GM.PlayerNum = PlayerPoolManager.Instance.CountPlayer();
-                GM.UpdateUI(GM.PlayerNum, GM.AINum);
  
             }
         }
         finally
         {
             // to update client ccu ui
-            var data = new VirtualResponse
+           /* var data = new VirtualResponse
             {
                 messageId = ClientMsgType.UpdateUI,
                 uiData = new UIData
                 {
-                    playerNum = GM.PlayerNum,
-                    aiNum = GM.AINum
+                    playerNum = GM.MirrorManager.PlayerNum,
+                    aiNum = GM.MirrorManager.AINum
                 }
             };
-            NetworkServer.SendToReady(data);
+            NetworkServer.SendToReady(data);*/
         }
     }
 }

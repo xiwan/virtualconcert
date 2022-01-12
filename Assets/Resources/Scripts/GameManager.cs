@@ -20,10 +20,6 @@ public class GameManager : MonoBehaviour
 
     private MonoBehaviour _randomCharacterPlacerScript;
 
-    public int PlayerNum;
-
-    public int AINum;
-
     private CameraChange _cameraChangeScript;
     private GameObject _followerTarget;
     private GameObject _follower;
@@ -65,7 +61,7 @@ public class GameManager : MonoBehaviour
 
     public void CleanData()
     {
-        PlayerPoolManager.Instance.ResetDataExcept(0);
+        PlayerPoolManager.Instance.RemoveAllData();
     }
 
     [ContextMenu("Spawn Animals")]
@@ -107,12 +103,7 @@ public class GameManager : MonoBehaviour
         {
             CameraFollow(true, _followerTarget);
         }
-    }
 
-    public void  UpdateUI(int playerNum, int aiNum)
-    {
-        var _ccuTex = GameObject.Find("Counter").GetComponent<Text>();
-        _ccuTex.text = "Player: " + playerNum + " AI:" + aiNum;
     }
 
     IEnumerator NetworkManagerSpawnAnimals()
