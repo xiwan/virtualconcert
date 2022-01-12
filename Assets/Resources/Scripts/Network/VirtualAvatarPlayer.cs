@@ -36,7 +36,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     [SyncVar]
     private bool _isWalking = false;
     [SyncVar]
-    private bool _isIdling = false;
+    private float _vSpeed = 0;
     [SyncVar]
     private bool _isDancing = false;
     [SyncVar]
@@ -249,7 +249,8 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             _isJumping = false;
             _isDancing = false;
             _isWalking = true;
-            _isIdling = false;
+            if (_moveData.walk) _vSpeed = 0.5f;
+            if (_moveData.sprint) _vSpeed = 0.9f;
         }
         else if (_moveData.jump)
         {
@@ -260,7 +261,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
                 _isWalking = false;
                 _isJumping = true;
                 _isDancing = false;
-                _isIdling = false;
             }
         }
         else if (_moveData.dance)
@@ -271,18 +271,10 @@ public class VirtualAvatarPlayer : NetworkBehaviour
                 _isWalking = false;
                 _isJumping = false;
                 _isDancing = true;
-                _isIdling = false;
             }
         }
-        else
-        {
-            _isWalking = false;
-            _isJumping = false;
-            _isDancing = false;
-            _isIdling = true;
-        }
 
-        _animator.SetFloat("Speed", moveData.speed);
+        _animator.SetFloat("Speed", _vSpeed);
         _animator.SetBool("isBlending", _isWalking);
         _animator.SetBool("isJumping", _isJumping);
         _animator.SetBool("isDancing", _isDancing);
