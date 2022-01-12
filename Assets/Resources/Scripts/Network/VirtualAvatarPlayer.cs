@@ -213,7 +213,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         }
         else if (isServer)
         {
-            if (_moveData.walk)
+            if (_moveData.walk || _moveData.sprint)
             {
                 var h = _moveData.horizontal;
                 var v = _moveData.vertical;
@@ -244,8 +244,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     {
         if (_moveData == null) return;
 
-        
-        if (_moveData.walk)
+        if (_moveData.walk || _moveData.sprint)
         {
             _isJumping = false;
             _isDancing = false;
@@ -283,8 +282,12 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             }
         }
 
-        _animator.SetFloat("Speed", moveData.speed);
-        _animator.SetBool("isBlending", moveData.speed > 0);
+        if (_isWalking || _isRunning)
+        {
+            _animator.SetFloat("Speed", moveData.speed);
+            _animator.SetBool("isBlending", moveData.speed > 0);
+        }
+        
         _animator.SetBool("isJumping", _isJumping);
         _animator.SetBool("isDancing", _isDancing);
     }

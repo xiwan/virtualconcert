@@ -101,7 +101,7 @@ public class VirtualNetworkManager : NetworkManager
                 if (broadcastMsg.TryDequeue(out VirtualResponse msg))
                 {
                     var moveData = msg.moveData;
-                    Debug.Log(moveData.walk + " x " + moveData.dance + " x " + moveData.jump + " x " + moveData.networkId + " length:" + broadcastMsg.Count);
+                    Debug.Log(moveData.walk + " x " + moveData.speed + " x " + moveData.dance + " x " + moveData.jump + " x " + moveData.networkId + " length:" + broadcastMsg.Count);
                     //Debug.Log(_isWalking + "=" + _isDancing + "=" + _isJumping + "=");
                     // send to all ready clients
                     NetworkServer.SendToReady(msg);
