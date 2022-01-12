@@ -34,9 +34,8 @@ public class UIEventController : MonoBehaviour
 
 	private void OnClick(BaseEventData pointData)
 	{
-		Debug.Log("Button Clicked. EventTrigger..");
-		// ((GameManager)_gm).SpawnAnimals();
-		//GameManager.GetVNM().CommandOnServer();
+		//Debug.Log("Button Clicked. EventTrigger.." + (EVENT)clickId + clickId);
+		
 		EventManager.Instance.Trigger((EVENT)clickId);
 
 	}

@@ -6,10 +6,8 @@ using UnityEngine;
 
 public enum EVENT 
 {
-    UISpawnAIs = 0,
-    UIPickAny = 1,
-    UIClientAuth = 2,
-    UIServerAuth = 3,
+    UISpawnAIs = 1,
+    UIRemoveAIs = 2,
 
     CameraFollow = 10,
 };
@@ -33,19 +31,16 @@ public class EventManager : Single<EventManager>
             }
         });
 
-        this.AddHandler(EVENT.UIPickAny, () =>
+        this.AddHandler(EVENT.UIRemoveAIs, () =>
         {
-
-        });
-
-        this.AddHandler(EVENT.UIClientAuth, () =>
-        {
-
-        });
-
-        this.AddHandler(EVENT.UIServerAuth, () =>
-        {
-
+            if (GameManager.GetVNM().IsActive())
+            {
+                GameManager.GetVNM().CommandOnServer(EVENT.UIRemoveAIs);
+            }
+            else
+            {
+                GameManager.GetGM().RemoveAnimals();
+            }
         });
     }
     public void AddHandler(EVENT evt, Action action)

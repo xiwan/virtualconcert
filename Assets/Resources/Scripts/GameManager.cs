@@ -69,6 +69,15 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(NetworkManagerSpawnAnimals());        
     }
+    [ContextMenu("Remove Animals")]
+    public void RemoveAnimals()
+    {
+        var father = GameObject.Find("People/AIs");
+        for (int i = 0; i < father.transform.childCount; i++)
+        {
+            GameObject.Destroy(father.transform.GetChild(i).gameObject);
+        }
+    }
 
     public void LoadGameObjects()
     {

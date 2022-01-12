@@ -84,6 +84,10 @@ public class VirtualNetworkManager : NetworkManager
         {
             GetConnPlayer().GetComponent<VirtualAvatarPlayer>().SpawnAIsOnServer();
         }
+        if (evt == EVENT.UIRemoveAIs)
+        {
+            GetConnPlayer().GetComponent<VirtualAvatarPlayer>().RemoveAIsOnServer();
+        }
     }
 
     public override void Awake()
@@ -166,7 +170,7 @@ public class VirtualNetworkManager : NetworkManager
         base.OnClientConnect();
         Debug.Log("Connected to server: ");
 
-        var playersPrefabs = DataManager.Instance.PlayerRrefabsList.ToArray();
+        var playersPrefabs = DataManager.Instance.PlayerAvatars;
         var value = UnityEngine.Random.Range(0, playersPrefabs.Length);
         var selectedName = playersPrefabs[value];
 

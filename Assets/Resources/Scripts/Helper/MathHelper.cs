@@ -21,6 +21,12 @@ public class MathHelper
         return (long)x;
     }
 
+    public static string RandomValue(string[] arr)
+    {
+        var value = UnityEngine.Random.Range(0, arr.Length);
+        return arr[value];
+    }
+
     #region Random
     /// <summary>
     /// 获取随机数int

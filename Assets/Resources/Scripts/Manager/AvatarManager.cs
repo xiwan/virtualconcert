@@ -39,7 +39,7 @@ public class AvatarManager : Single<AvatarManager>
 
     public GameObject SpawnPlayerFromAvatar(GameObject instance, Avatar avatar, Transform parent = null)
     {
-        GameObject _playerObject = GameObject.Instantiate(instance, Vector3.zero, Quaternion.identity, parent);
+        GameObject _playerObject = GameObject.Instantiate(instance, parent.transform.position, Quaternion.identity, parent);
         var spawnedInstance = AvatarManager.Instance.SpawnFromAvatar(_playerObject, avatar);
         // enable player avatar sync avatar data
         var playerAvatar = spawnedInstance.GetComponent<VirtualAvatarPlayer>();

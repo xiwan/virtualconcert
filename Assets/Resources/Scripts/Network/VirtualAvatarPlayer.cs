@@ -92,7 +92,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             this.takeOver = true;
             //this.name += "-" + GameManager.GetVNM().GetNetId(); // for animation sync
             TakeOverEventOn();
-            StartCoroutine(OutlineCharacter(0.02f));
+            StartCoroutine(OutlineCharacter(0.01f));
             // client cache
             CachePlayer();
 
@@ -232,6 +232,14 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     {
         GameManager.GetGM().SpawnAnimals();
     }
+
+    [Command]
+    public void RemoveAIsOnServer()
+    {
+        GameManager.GetGM().RemoveAnimals();
+    }
+
+    
 
     private IEnumerator OutlineCharacter(float value)
     {

@@ -59,7 +59,8 @@ public class ServerHandler
             var _randomCharacterPlacerScript = GameObject.Find("People").GetComponent<RandomCharacterPlacer>();
             var parent = GameObject.Find("People/AIs");
 
-            var characters = DataManager.Instance.NpcPrefabsList.ToArray();
+            //var characters = DataManager.Instance.NpcPrefabsList.ToArray();
+            var characters = DataManager.Instance.GenerateAvatarList().ToArray();
             var _instances = ((RandomCharacterPlacer)_randomCharacterPlacerScript).SpawnAnimals(mainRig, characters, parent, spawnAmount, spawnRadius);
 
             //GM.MirrorManager.AINum += _instances.Length;

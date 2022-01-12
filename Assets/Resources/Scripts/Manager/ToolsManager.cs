@@ -18,6 +18,7 @@ public class ToolsManager
 
     static Action<string> Logger;
 
+
     public static int ParseInt32(string str, int defaultValue = -1)
     {
         int result;
