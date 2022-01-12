@@ -273,6 +273,10 @@ public class VirtualAvatarPlayer : NetworkBehaviour
                 _isDancing = true;
             }
         }
+        else if (_moveData.idle)
+        {
+            _vSpeed = 0;
+        }
 
         _animator.SetFloat("Speed", _vSpeed);
         _animator.SetBool("isBlending", _isWalking);
@@ -300,6 +304,8 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         {
             _moveData.speed = (_moveData.sprint) ? 0.9f : 0.5f;
         }
+
+        _moveData.idle = (!_moveData.walk && !_moveData.sprint && !_moveData.jump && !_moveData.dance);
 
         var msg = new VirtualRequest
         {
