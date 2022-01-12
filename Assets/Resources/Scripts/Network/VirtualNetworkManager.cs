@@ -143,17 +143,22 @@ public class VirtualNetworkManager : NetworkManager
     {
         base.OnClientConnect();
         Debug.Log("Connected to server: ");
+
+        var playersPrefabs = DataManager.Instance.PlayerRrefabsList.ToArray();
+        var value = UnityEngine.Random.Range(0, playersPrefabs.Length);
+        var selectedName = playersPrefabs[value];
+
         // need serilizer later
         VirtualRequest msg = new VirtualRequest
         {
             messageId = ServerMsgType.ClientLogin,
-            content = "woman-police",
+            content = selectedName,
             message = new Avatar
             {
                 id = 101,
                 type = CHARACTER.Player, // player
-                aname = "woman-police",
-                animatorController = "YmcaController"
+                aname = selectedName,
+                animatorController = "UserController"
             }
         };
 

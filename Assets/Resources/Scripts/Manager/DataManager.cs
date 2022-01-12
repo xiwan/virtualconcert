@@ -8,8 +8,21 @@ public class DataManager : Single<DataManager>
 {
     public List<Avatar> NpcPrefabsList = new List<Avatar>();
 
+    public List<string> PlayerRrefabsList = new List<string>();
+
+
     public void LoadPrefabsData()
     {
+        PlayerRrefabsList.Add("woman-zombie");
+        PlayerRrefabsList.Add("woman-soldier");
+        PlayerRrefabsList.Add("woman-swimsuit");
+        PlayerRrefabsList.Add("woman-skate");
+        PlayerRrefabsList.Add("woman-prehistoric");
+        PlayerRrefabsList.Add("woman-police");
+        PlayerRrefabsList.Add("woman-lumberjack");
+        PlayerRrefabsList.Add("woman-fire");
+        PlayerRrefabsList.Add("woman-farm");
+
         var man01 = new Avatar()
         {
             id = 1,
