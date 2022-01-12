@@ -74,11 +74,6 @@ public class VirtualNetworkManager : NetworkManager
         {
             GetConnPlayer().GetComponent<VirtualAvatarPlayer>().SpawnAIsOnServer();
         }
-        else if(evt == EVENT.UIPickAny)
-        {
-            //(GetConnPlayer() as VirtualAvatarPlayer).PickAnyAIOnServer();
-        }
-
     }
 
     public override void Awake()

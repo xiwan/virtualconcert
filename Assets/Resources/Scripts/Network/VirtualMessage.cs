@@ -22,7 +22,7 @@ public struct VirtualResponse : NetworkMessage
     public ClientMsgType messageId;
     public string content;
     public byte[] payload;
-
+    public MoveData moveData;
     public UIData uiData;   
 }
 

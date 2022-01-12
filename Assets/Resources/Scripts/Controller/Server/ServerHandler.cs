@@ -26,6 +26,14 @@ public class ServerHandler
         player.takeOver = msg.takeOver;
         player.playerController.takeOver = msg.takeOver;
         player.playerController._moveData = msg.moveData;
+
+        // sync animation to all  proxy
+        var data = new VirtualResponse
+        {
+            messageId = ClientMsgType.SyncAnimation,
+            moveData = msg.moveData
+        };
+        NetworkServer.SendToReady(data);
     }
 
     public static void SpawnAIs(NetworkConnection conn, VirtualRequest msg)
@@ -78,7 +86,7 @@ public class ServerHandler
         finally
         {
             // to update client ccu ui
-            var rsp = new VirtualResponse
+            var data = new VirtualResponse
             {
                 messageId = ClientMsgType.UpdateUI,
                 uiData = new UIData
@@ -87,7 +95,7 @@ public class ServerHandler
                     aiNum = GM.AINum
                 }
             };
-            NetworkServer.SendToReady(rsp);
+            NetworkServer.SendToReady(data);
         }
     }
 }

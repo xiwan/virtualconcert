@@ -209,7 +209,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
                 _characterController.Move(transform.forward * speed * v * Time.fixedDeltaTime);
                 _characterController.Move(_velocity * Time.fixedDeltaTime);
                 transform.Rotate(Vector3.up, h * rotateSpeed * 2);
-
             }
         }
     }
