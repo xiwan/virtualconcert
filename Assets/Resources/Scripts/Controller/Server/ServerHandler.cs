@@ -33,7 +33,7 @@ public class ServerHandler
             messageId = ClientMsgType.SyncAnimation,
             moveData = msg.moveData
         };
-        GM.MirrorManager.PushBroadMsg(data);
+        //GM.MirrorManager.PushBroadMsg(data);
 
         //NetworkServer.SendToReady(data);
     }

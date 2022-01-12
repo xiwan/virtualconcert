@@ -23,7 +23,7 @@ public class ClientHandler
         if (player)
         {
             var moveData = msg.moveData;
-            Debug.Log("client: " + moveData.walk + " x " + moveData.speed + " x " + moveData.dance + " x " + moveData.jump + " x " + moveData.networkId);
+            //Debug.Log("client: " + moveData.walk + " x " + moveData.speed + " x " + moveData.dance + " x " + moveData.jump + " x " + moveData.networkId);
             player.GetComponent<VirtualAvatarPlayer>().MoveAnimation(msg.moveData);
         }
     }
