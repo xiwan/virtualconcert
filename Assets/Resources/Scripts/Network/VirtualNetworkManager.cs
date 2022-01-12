@@ -100,6 +100,9 @@ public class VirtualNetworkManager : NetworkManager
             {
                 if (broadcastMsg.TryDequeue(out VirtualResponse msg))
                 {
+                    var moveData = msg.moveData;
+                    Debug.Log(moveData.walk + " x " + moveData.dance + " x " + moveData.jump + " x " + moveData.networkId);
+                    //Debug.Log(_isWalking + "=" + _isDancing + "=" + _isJumping + "=");
                     // send to all ready clients
                     NetworkServer.SendToReady(msg);
                 }
@@ -118,8 +121,10 @@ public class VirtualNetworkManager : NetworkManager
     {
         base.OnStartServer();
 
-        StartCoroutine(BroadCastMsgToAll());
         NetworkServer.RegisterHandler<VirtualRequest>(ServerRouteTable.Instance.ReceiveMsg);
+
+        StartCoroutine(BroadCastMsgToAll());
+        
     }
 
     public override void OnStopServer()

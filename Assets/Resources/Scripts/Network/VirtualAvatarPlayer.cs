@@ -239,8 +239,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     {
         if (_moveData == null) return;
 
-        Debug.Log(moveData.walk + "|" + moveData.dance + "|" + moveData.jump + "|");
-        Debug.Log(_isWalking + "=" + _isDancing + "=" + _isJumping + "=");
+        
         if (_moveData.walk)
         {
             _isJumping = false;
