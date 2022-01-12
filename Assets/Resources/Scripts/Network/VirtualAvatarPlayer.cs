@@ -59,6 +59,8 @@ public class VirtualAvatarPlayer : NetworkBehaviour
 
     private void Awake()
     {
+        _moveData = new MoveData();
+
         _animator = transform.GetComponent<Animator>();
         _overrideController = Resources.Load<AnimatorOverrideController>(_swapAnimatorPath);
 
@@ -88,10 +90,13 @@ public class VirtualAvatarPlayer : NetworkBehaviour
             var parent = GameObject.Find("People/Players");
             this.transform.SetParent(parent.transform, false);
             this.takeOver = true;
+            //this.name += "-" + GameManager.GetVNM().GetNetId(); // for animation sync
             TakeOverEventOn();
             StartCoroutine(OutlineCharacter(0.02f));
-        }
-        if (avatar.type == CHARACTER.AI)
+            // client cache
+            CachePlayer();
+
+        }else if (avatar.type == CHARACTER.AI)
         {
             var parent = GameObject.Find("People/AIs");
             this.transform.SetParent(parent.transform, false);
@@ -103,11 +108,15 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
+        // server cache
+        CachePlayer();
+    }
 
-        _moveData = new MoveData();
+    private void CachePlayer()
+    {
         if (_player == null)
         {
-            this.takeOver = false;
+            //this.takeOver = false;
             _player = gameObject.AddComponent<Player>();
             _player.instanceId = GetInstanceID();
             _player.playerController = this;
@@ -125,7 +134,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
                 PlayerPoolManager.Instance.UpsertData(_player.networkId, _player);
             }
         }
-
     }
 
     public void Update()
@@ -280,6 +288,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         var v = Input.GetAxis("Vertical");
         _moveData = new MoveData
         {
+            networkId = Convert.ToInt32(netId),
             horizontal = h,
             vertical = v,
             speed = 0,
@@ -297,7 +306,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         var msg = new VirtualRequest
         {
             messageId = ServerMsgType.ClientTakeOver,
-            networkId = Convert.ToInt32(netId),
+            networkId = _moveData.networkId,
             takeOver = true,
             moveData = _moveData
         };

@@ -27,13 +27,15 @@ public class ServerHandler
         player.playerController.takeOver = msg.takeOver;
         player.playerController._moveData = msg.moveData;
 
-        // sync animation to all  proxy
-       /* var data = new VirtualResponse
+        // sync animation to all  proxy: batch mode
+        var data = new VirtualResponse
         {
             messageId = ClientMsgType.SyncAnimation,
-            moveData = msg.moveData
+            moveDataList = new List<MoveData>()
         };
-        NetworkServer.SendToReady(data);*/
+        data.moveDataList.Add(msg.moveData);
+
+        NetworkServer.SendToReady(data);
     }
 
     public static void SpawnAIs(NetworkConnection conn, VirtualRequest msg)

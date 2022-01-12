@@ -22,8 +22,8 @@ public struct VirtualResponse : NetworkMessage
     public ClientMsgType messageId;
     public string content;
     public byte[] payload;
-    public MoveData moveData;
-    public UIData uiData;   
+    public List<MoveData> moveDataList;
+    public UIData uiData;
 }
 
 public struct VirtualAvatarCreateMessage 
@@ -39,6 +39,8 @@ public class UIData
 
 public class MoveData
 {
+    public int networkId;
+
     public float horizontal = 0;
     public float vertical = 0;
     public float speed = 0;
