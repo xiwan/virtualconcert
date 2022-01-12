@@ -9,6 +9,7 @@ public class CameraChange : MonoBehaviour
 
     public CinemachineVirtualCamera followCamera;
     public CinemachineFreeLook freeCamera;
+    public float speed = 2;
 
     public void CameraSwitch(bool takeOver)
     {
@@ -37,6 +38,14 @@ public class CameraChange : MonoBehaviour
         follower.rotation = Quaternion.LookRotation(target.forward);
     }
 
+    public void CameraRotate()
+    {
+        float X = Input.GetAxis("Mouse X") * speed;
+        float Y = Input.GetAxis("Mouse Y") * speed;
+        Camera.main.transform.localRotation = Camera.main.transform.localRotation * Quaternion.Euler(-Y, 0, 0);
+        transform.localRotation = transform.localRotation * Quaternion.Euler(0, X, 0);
+    }
+
     void Start()
     {
         CameraSwitch(false);
@@ -47,6 +56,6 @@ public class CameraChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //CameraRotate();
     }
 }

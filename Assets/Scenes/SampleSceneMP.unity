@@ -632,6 +632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followCamera: {fileID: 481982141}
   freeCamera: {fileID: 374927150}
+  speed: 2
 --- !u!1 &356288735
 GameObject:
   m_ObjectHideFlags: 3
@@ -1570,11 +1571,11 @@ MonoBehaviour:
   m_HorizontalDamping: 0
   m_VerticalDamping: 0
   m_ScreenX: 0.5
-  m_ScreenY: 0.49999997
-  m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0.034782607
+  m_ScreenY: 0.5
+  m_DeadZoneWidth: 0.01
+  m_DeadZoneHeight: 0.2
   m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.8
+  m_SoftZoneHeight: 2
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
