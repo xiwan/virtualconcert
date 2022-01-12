@@ -20,6 +20,7 @@ public class ClientHandler
     public static void SyncAnimation(VirtualResponse msg)
     {
         var player = GM.MirrorManager.GetConnPlayer();
+        Debug.Log(player.name + " " + GM.MirrorManager.GetNetId() + " " + msg.moveData);
         if (player != null)
         {
             player.GetComponent<VirtualAvatarPlayer>().MoveAnimation(msg.moveData);
