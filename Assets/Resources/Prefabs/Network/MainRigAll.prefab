@@ -3495,7 +3495,7 @@ MonoBehaviour:
     animationBool: isDancing
     minStateTime: 5
     maxStateTime: 10
-    stateWeight: 1
+    stateWeight: 200
   movementStates:
   - stateName: Walking
     animationBool: isWalking
