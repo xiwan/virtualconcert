@@ -1,6 +1,7 @@
 using Mirror;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -90,20 +91,34 @@ public class VirtualNetworkManager : NetworkManager
 
     }
 
-    public override void Start()
+    IEnumerator BroadCastMsgToAll()
     {
-        base.Start();
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+            do
+            {
+                if (broadcastMsg.TryDequeue(out VirtualResponse msg))
+                {
+                    // send to all ready clients
+                    NetworkServer.SendToReady(msg);
+                }
+            }
+            while (broadcastMsg.Count > 0);
+        }
     }
 
-    private void FixedUpdate()
+    private static ConcurrentQueue<VirtualResponse> broadcastMsg = new ConcurrentQueue<VirtualResponse>();
+    public void PushBroadMsg(VirtualResponse data)
     {
-
+        broadcastMsg.Enqueue(data);
     }
 
     public override void OnStartServer()
     {
         base.OnStartServer();
 
+        StartCoroutine(BroadCastMsgToAll());
         NetworkServer.RegisterHandler<VirtualRequest>(ServerRouteTable.Instance.ReceiveMsg);
     }
 

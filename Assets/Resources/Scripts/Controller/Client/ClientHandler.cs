@@ -19,13 +19,10 @@ public class ClientHandler
 
     public static void SyncAnimation(VirtualResponse msg)
     {
-        foreach (MoveData data in msg.moveDataList)
+        var player = PlayerPoolManager.Instance.GetPlayer(msg.moveData.networkId);
+        if (player)
         {
-            var player = PlayerPoolManager.Instance.GetPlayer(data.networkId);
-            if (player)
-            {
-                player.GetComponent<VirtualAvatarPlayer>().MoveAnimation(data);
-            }
+            player.GetComponent<VirtualAvatarPlayer>().MoveAnimation(msg.moveData);
         }
     }
 

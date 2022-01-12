@@ -8,6 +8,7 @@ using UnityEngine;
 
 public struct VirtualRequest : NetworkMessage
 {
+    public int msgId;
     public ServerMsgType messageId;
     public int networkId;
     public bool takeOver;
@@ -19,10 +20,11 @@ public struct VirtualRequest : NetworkMessage
 
 public struct VirtualResponse : NetworkMessage
 {
+    public int msgId;
     public ClientMsgType messageId;
     public string content;
     public byte[] payload;
-    public List<MoveData> moveDataList;
+    public MoveData moveData;
     public UIData uiData;
 }
 

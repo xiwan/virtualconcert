@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using PolyPerfect;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 public class GameManager : MonoBehaviour
 {
@@ -52,7 +53,6 @@ public class GameManager : MonoBehaviour
 
     public void LoadData()
     {
-        
         // data load goes here
         DataManager.Instance.LoadPrefabsData();
         EventManager.Instance.LoadEvent();

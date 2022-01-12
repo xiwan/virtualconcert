@@ -96,6 +96,13 @@ public class MathHelper
         double exponent = Math.Pow(2.0, random.Next(-126, 128));
         return (float)(mantissa * exponent);
     }
+
+    static Task GetRandomDelay()
+    {
+        int delay = new Random(DateTime.Now.Millisecond).Next(1500);
+        return Task.Delay(delay);
+    }
+
     #endregion
 }
 

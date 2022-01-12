@@ -31,15 +31,10 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     public float jumpHeight = 3f;
     public LayerMask layerMask;
 
-    [SyncVar]
     private bool _isJumping = false;
-    [SyncVar]
     private bool _isWalking = false;
-    [SyncVar]
     private bool _isRunning = false;
-    [SyncVar]
     private bool _isDancing = false;
-    [SyncVar]
     private bool _isGrounded = false;
 
     private Player _player;
@@ -248,10 +243,18 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         Debug.Log(_isWalking + "=" + _isDancing + "=" + _isJumping + "=");
         if (_moveData.walk)
         {
-            _isWalking = true;
             _isJumping = false;
             _isDancing = false;
-
+            if (_moveData.speed > 0.5)
+            {
+                _isRunning = true;
+                _isWalking = false;
+            }
+            else
+            {
+                _isRunning = false;
+                _isWalking = true;
+            }
         }
         else if (_moveData.jump)
         {

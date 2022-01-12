@@ -31,11 +31,11 @@ public class ServerHandler
         var data = new VirtualResponse
         {
             messageId = ClientMsgType.SyncAnimation,
-            moveDataList = new List<MoveData>()
+            moveData = msg.moveData
         };
-        data.moveDataList.Add(msg.moveData);
+        GM.MirrorManager.PushBroadMsg(data);
 
-        NetworkServer.SendToReady(data);
+        //NetworkServer.SendToReady(data);
     }
 
     public static void SpawnAIs(NetworkConnection conn, VirtualRequest msg)
