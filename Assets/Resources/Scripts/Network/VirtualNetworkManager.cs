@@ -123,7 +123,7 @@ public class VirtualNetworkManager : NetworkManager
 
         NetworkServer.RegisterHandler<VirtualRequest>(ServerRouteTable.Instance.ReceiveMsg);
 
-        //StartCoroutine(BroadCastMsgToAll());
+        StartCoroutine(BroadCastMsgToAll());
         
     }
 

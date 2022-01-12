@@ -33,9 +33,9 @@ public class ServerHandler
             messageId = ClientMsgType.SyncAnimation,
             moveData = msg.moveData
         };
-        //GM.MirrorManager.PushBroadMsg(data);
+        GM.MirrorManager.PushBroadMsg(data);
 
-        NetworkServer.SendToReady(data);
+        //NetworkServer.SendToReady(data);
     }
 
     public static void SpawnAIs(NetworkConnection conn, VirtualRequest msg)
