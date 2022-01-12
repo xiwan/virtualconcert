@@ -31,14 +31,19 @@ public class VirtualAvatarPlayer : NetworkBehaviour
     public float jumpHeight = 3f;
     public LayerMask layerMask;
 
-    private Player _player;
-
-    private string _swapAnimatorPath = "AnimationControllers/UserController";
+    [SyncVar]
     private bool _isJumping = false;
+    [SyncVar]
     private bool _isWalking = false;
+    [SyncVar]
     private bool _isRunning = false;
+    [SyncVar]
     private bool _isDancing = false;
+    [SyncVar]
     private bool _isGrounded = false;
+
+    private Player _player;
+    private string _swapAnimatorPath = "AnimationControllers/UserController";
     private Transform _groundCheck;
 
     private AnimatorOverrideController _overrideController;
@@ -232,6 +237,7 @@ public class VirtualAvatarPlayer : NetworkBehaviour
         if (_moveData == null) return;
 
         Debug.Log(moveData.walk + "|" + moveData.dance + "|" + moveData.jump + "|");
+        Debug.Log(_isWalking + "=" + _isDancing + "=" + _isJumping + "=");
         if (_moveData.walk)
         {
             _isWalking = true;

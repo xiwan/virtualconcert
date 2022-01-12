@@ -28,12 +28,12 @@ public class ServerHandler
         player.playerController._moveData = msg.moveData;
 
         // sync animation to all  proxy
-        var data = new VirtualResponse
+       /* var data = new VirtualResponse
         {
             messageId = ClientMsgType.SyncAnimation,
             moveData = msg.moveData
         };
-        NetworkServer.SendToReady(data);
+        NetworkServer.SendToReady(data);*/
     }
 
     public static void SpawnAIs(NetworkConnection conn, VirtualRequest msg)
