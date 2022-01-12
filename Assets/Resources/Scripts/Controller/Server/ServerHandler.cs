@@ -81,8 +81,11 @@ public class ServerHandler
             var rsp = new VirtualResponse
             {
                 messageId = ClientMsgType.UpdateUI,
-                playerNum = GM.PlayerNum,
-                aiNum = GM.AINum
+                uiData = new UIData
+                {
+                    playerNum = GM.PlayerNum,
+                    aiNum = GM.AINum
+                }
             };
             NetworkServer.SendToReady(rsp);
         }

@@ -21,14 +21,20 @@ public struct VirtualResponse : NetworkMessage
 {
     public ClientMsgType messageId;
     public string content;
-    public int playerNum;
-    public int aiNum;
     public byte[] payload;
+
+    public UIData uiData;   
 }
 
 public struct VirtualAvatarCreateMessage 
 {
     public Avatar[] avatars;
+}
+
+public class UIData
+{
+    public int playerNum;
+    public int aiNum;
 }
 
 public class MoveData

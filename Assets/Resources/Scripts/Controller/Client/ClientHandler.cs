@@ -14,7 +14,12 @@ public class ClientHandler
 
     public static void UpdateUI(VirtualResponse msg)
     {
-        GM.UpdateUI(msg.playerNum, msg.aiNum);
+        GM.UpdateUI(msg.uiData.playerNum, msg.uiData.aiNum);
+    }
+
+    public static void SyncAnimation(VirtualResponse msg)
+    { 
+    
     }
 
 

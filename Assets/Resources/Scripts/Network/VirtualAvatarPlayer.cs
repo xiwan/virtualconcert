@@ -211,7 +211,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
                 transform.Rotate(Vector3.up, h * rotateSpeed * 2);
 
             }
-
         }
     }
 
@@ -231,6 +230,8 @@ public class VirtualAvatarPlayer : NetworkBehaviour
 
     public void MoveAnimation(MoveData moveData)
     {
+        if (_moveData == null) return;
+
         if (_moveData.walk)
         {
             _isWalking = true;
@@ -249,8 +250,6 @@ public class VirtualAvatarPlayer : NetworkBehaviour
                 _isJumping = true;
                 _isDancing = false;
             }
-
-
         }
         else if (_moveData.dance)
         {
