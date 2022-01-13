@@ -68,6 +68,18 @@ It was pretty easy, attaching it to the npc gameobject in the runtime would do t
 
 [mixamo](https://www.mixamo.com/)
 
+## How to build and deploy
+### The old-fashion way
+1. Use the in-editor tool: Menu -> Build -> Linux Server
+2. Upload the <Project Root>/Build/Linux folder to your Linux server
+3. Run server.x86_64 (you need to chmod +x it before running)
 
-
+### Using Docker and Docker Hub
+1. Install [docker](https://docs.docker.com/get-docker/) on your dev machine and the Linux server
+2. Sign-up an account on [Docker Hub](https://hub.docker.com/)
+3. After you build the Linux binary with the in-editor tool, build the docker image with the *Tag* equals [Your Docker Hub Account]/[Project Name]: `docker build . -t <Tag>`
+4. Upload the image to Docker Hub: `docker push <Tag>`
+5. On your Linux server, pull down the docker image: `docker pull <Tag>`. If you have internet connection issue, try a registry mirror (e.g. [Tencent Cloud](https://cloud.tencent.com/document/product/1207/45596))
+6. Launch the Unity server: `docker run --name virtualconcert -p 7777:7777/udp -d <Tag>`
+7. Use this command to stop the server: `docker stop virtualconcert`
 
